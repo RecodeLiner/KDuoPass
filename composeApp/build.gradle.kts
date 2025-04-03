@@ -1,0 +1,133 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+plugins {
+    alias(libs.plugins.multiplatform)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
+    id("com.rcl.buildconfig")
+}
+
+kotlin {
+    jvmToolchain(libs.versions.java.get().toInt())
+    androidTarget()
+
+    jvm()
+
+    for (target in listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    )) {
+        target.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        commonMain.configure {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.components.uiToolingPreview)
+                implementation(compose.components.resources)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.decompose)
+                implementation(libs.decompose.compose)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.coil)
+                implementation(libs.coil.network.ktor)
+                implementation(libs.room.runtime)
+            }
+        }
+
+        commonTest.configure {
+            dependencies {
+                implementation(kotlin("test"))
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
+
+        androidMain.configure {
+            dependencies {
+                implementation(compose.uiTooling)
+                implementation(libs.androidx.activityCompose)
+                implementation(libs.kotlinx.coroutines.android)
+            }
+        }
+
+        jvmMain.configure {
+            dependencies {
+                implementation(libs.bundles.jewel)
+                implementation(compose.desktop.currentOs) {
+                    exclude(group = "org.jetbrains.compose.material")
+                }
+                implementation(libs.kotlinx.coroutines.swing)
+            }
+        }
+    }
+}
+
+android {
+    namespace = "com.rcl.kduopass"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 35
+
+        applicationId = "com.rcl.kduopass.androidApp"
+        versionCode = 1
+        versionName = "1.0.0"
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+
+        nativeDistributions {
+            targetFormats(
+                TargetFormat.Dmg,
+                TargetFormat.Msi,
+                TargetFormat.Deb
+            )
+            packageName = "KDuoPass"
+            packageVersion = "1.0.0"
+
+            linux {
+                //iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
+            }
+            windows {
+                //iconFile.set(project.file("desktopAppIcons/WindowsIcon.ico"))
+            }
+            macOS {
+                //iconFile.set(project.file("desktopAppIcons/MacosIcon.icns"))
+                bundleID = "com.rcl.kduopass.desktopApp"
+            }
+        }
+    }
+}
+
+buildConfig {
+    objectName = "InternalBuildConfig"
+    packageName = "com.rcl.kduopass"
+    buildConfigField("String", "APP_NAME", rootProject.name)
+}
+
+dependencies {
+    with(libs.room.compiler) {
+        add("kspAndroid", this)
+        add("kspJvm", this)
+        add("kspIosX64", this)
+        add("kspIosArm64", this)
+        add("kspIosSimulatorArm64", this)
+    }
+}
