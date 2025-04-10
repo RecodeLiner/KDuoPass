@@ -1,20 +1,38 @@
 package com.rcl.kduopass
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.arkivanov.decompose.defaultComponentContext
+import com.rcl.kduopass.data.database.AppDatabase
+import com.rcl.kduopass.presentation.navigation.RootComponent
+import com.rcl.kduopass.presentation.screens.RootScreen
+
 
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val root =
+            RootComponent(
+                componentContext = defaultComponentContext(),
+                appComponent = (application as App).appComponent(),
+            )
         enableEdgeToEdge()
-        setContent { App() }
+        setContent {
+            RootScreen(root)
+        }
     }
 }
 
-@Preview
-@Composable
-fun AppPreview() { App() }
+fun getDatabaseBuilder(ctx: Context): RoomDatabase.Builder<AppDatabase> {
+    val appContext = ctx.applicationContext
+    val dbFile = appContext.getDatabasePath("dpkss.db")
+    return Room.databaseBuilder<AppDatabase>(
+        context = appContext,
+        name = dbFile.absolutePath
+    )
+}

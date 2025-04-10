@@ -4,7 +4,8 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="KDuoPass"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:theme="@android:style/Theme.Material.NoActionBar"
+        android:name=".App">
         <activity
             android:name=".AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

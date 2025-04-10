@@ -4,15 +4,17 @@ kotlin = "2.1.20"
 compose = "1.7.3"
 agp = "8.9.1"
 androidx-activityCompose = "1.10.1"
-kotlinx-coroutines = "1.10.1"
+kotlinx-coroutines = "1.10.2"
 decompose = "3.3.0"
-kotlinx-serialization = "1.8.0"
+kotlinx-serialization = "1.8.1"
 coil = "3.1.0"
 java = "21"
-room = "2.7.0-rc03"
+room = "2.7.0"
 ksp = "2.1.20-1.0.31"
 buildKonfig = "0.17.0"
 jewel = "0.19.7"
+kotlin-inject="0.7.2"
+sqlite = "2.5.0"
 
 [libraries]
 
@@ -30,6 +32,9 @@ coil = { group = "io.coil-kt.coil3", name = "coil-compose-core", version.ref = "
 coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
+kotlin-inject-compiler = { group = "me.tatarka.inject", name = "kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
+kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-runtime", version.ref = "kotlin-inject" }
 
 [bundles]
 

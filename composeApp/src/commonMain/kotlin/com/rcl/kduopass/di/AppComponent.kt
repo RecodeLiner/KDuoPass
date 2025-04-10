@@ -1,0 +1,37 @@
+package com.rcl.kduopass.di
+
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.rcl.kduopass.data.database.AccountDao
+import com.rcl.kduopass.data.database.AppDatabase
+import com.rcl.kduopass.data.repository.AccountRepositoryImpl
+import com.rcl.kduopass.domain.repository.AccountRepository
+import com.rcl.kduopass.domain.usecase.AddAccountUseCase
+import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
+import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
+import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+
+@Component
+abstract class AppComponent(
+    @Component val platformComponent: PlatformSpecificComponents
+) {
+    @Provides
+    fun accountRepository(impl: AccountRepositoryImpl): AccountRepository = impl
+    @Provides
+    fun provideDataBase(builder: RoomDatabase.Builder<AppDatabase>) = builder
+        .fallbackToDestructiveMigrationOnDowngrade(false)
+        .setDriver(BundledSQLiteDriver())
+        .setQueryCoroutineContext(Dispatchers.IO)
+        .build()
+
+    @Provides
+    fun provideAccountDao(appDatabase: AppDatabase): AccountDao = appDatabase.accountDao()
+    abstract val generateCodeUseCase: GenerateCodeUseCase
+    abstract val addAccountUseCase: AddAccountUseCase
+    abstract fun accountViewModel(): AccountViewModel
+    abstract fun addAccountViewModel(): AddAccountViewModel
+}

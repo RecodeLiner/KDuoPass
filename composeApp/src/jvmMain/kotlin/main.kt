@@ -1,10 +1,20 @@
+
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.rcl.kduopass.App
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.rcl.kduopass.InternalBuildConfig
+import com.rcl.kduopass.data.database.AppDatabase
+import com.rcl.kduopass.di.AppComponent
+import com.rcl.kduopass.di.create
+import com.rcl.kduopass.presentation.navigation.RootComponent
+import com.rcl.kduopass.presentation.screens.RootScreen
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
 import org.jetbrains.jewel.intui.standalone.theme.createDefaultTextStyle
@@ -22,11 +32,23 @@ import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
 import org.jetbrains.jewel.window.styling.TitleBarStyle
 import java.awt.Dimension
+import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
 fun main() {
-    application {
+    val lifecycle = LifecycleRegistry()
+    val appComponent = AppComponent::class.create(JvmPlatformComponent::class.create())
 
+    val rootComponent = runOnUiThread {
+        RootComponent(
+            componentContext = DefaultComponentContext(lifecycle = lifecycle),
+            appComponent = appComponent,
+        )
+    }
+
+    application {
+        val windowState = rememberWindowState()
+        LifecycleController(lifecycle, windowState)
         val textStyle = JewelTheme.createDefaultTextStyle()
         val editorStyle = JewelTheme.createEditorTextStyle()
 
@@ -58,16 +80,23 @@ fun main() {
         ) {
             DecoratedWindow(
                 onCloseRequest = ::exitApplication,
-                state = rememberWindowState(width = 800.dp, height = 600.dp),
-                title = com.rcl.kduopass.InternalBuildConfig.APP_NAME,
+                state = windowState,
+                title = InternalBuildConfig.APP_NAME,
                 content = {
                     TitleBar(Modifier.newFullscreenControls()) {
                         Text(title)
                     }
                     window.minimumSize = Dimension(350, 600)
-                    App()
+                    RootScreen(rootComponent)
                 },
             )
         }
     }
+}
+
+fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
+    val dbFile = File(System.getProperty("java.io.tmpdir"), "user.db")
+    return Room.databaseBuilder<AppDatabase>(
+        name = dbFile.absolutePath,
+    )
 }

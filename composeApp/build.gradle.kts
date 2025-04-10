@@ -43,6 +43,8 @@ kotlin {
                 implementation(libs.coil)
                 implementation(libs.coil.network.ktor)
                 implementation(libs.room.runtime)
+                implementation(libs.sqlite.bundled)
+                implementation(libs.kotlin.inject.runtime)
             }
         }
 
@@ -123,11 +125,16 @@ buildConfig {
 }
 
 dependencies {
-    with(libs.room.compiler) {
-        add("kspAndroid", this)
-        add("kspJvm", this)
-        add("kspIosX64", this)
-        add("kspIosArm64", this)
-        add("kspIosSimulatorArm64", this)
+    for (dependency in listOf(
+        libs.kotlin.inject.compiler,
+        libs.room.compiler
+    )) {
+        with(dependency) {
+            add("kspAndroid", this)
+            add("kspJvm", this)
+            add("kspIosX64", this)
+            add("kspIosArm64", this)
+            add("kspIosSimulatorArm64", this)
+        }
     }
 }
