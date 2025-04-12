@@ -15,11 +15,11 @@ class RootComponent(
 
     private val navigation = StackNavigation<ScreenConfig>()
 
-    private fun navigateTo(config: ScreenConfig) {
+    fun navigateTo(config: ScreenConfig) {
         navigation.pushToFront(config)
     }
 
-    private fun navigateBack() {
+    fun navigateBack() {
         navigation.pop()
     }
 

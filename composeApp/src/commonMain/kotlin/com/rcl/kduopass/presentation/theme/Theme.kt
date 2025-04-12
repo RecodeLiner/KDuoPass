@@ -1,4 +1,4 @@
-package com.rcl.kduopass.theme
+package com.rcl.kduopass.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -24,13 +24,9 @@ internal fun AppTheme(
         LocalThemeIsDark provides isDarkState
     ) {
         val isDark by isDarkState
-        SystemAppearance(!isDark)
         MaterialTheme(
             colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
             content = { Surface(content = content) }
         )
     }
 }
-
-@Composable
-internal expect fun SystemAppearance(isDark: Boolean)

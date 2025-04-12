@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rcl.kduopass.theme.AppTheme
+import com.rcl.kduopass.presentation.theme.AppTheme
 
 @Composable
 internal fun App() = AppTheme {
