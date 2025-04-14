@@ -27,6 +27,8 @@ fun AccountListScreen(
     val accounts by viewModel.accounts.collectAsState()
     val secondsRemaining by viewModel.remainingSeconds.collectAsState()
 
+    val progress = (30 - secondsRemaining) / 30f
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -46,7 +48,7 @@ fun AccountListScreen(
             items(accounts, key = { it.account.id }) { accountWithCode ->
                 AccountItem(
                     accountWithCode = accountWithCode,
-                    progress = (30 - secondsRemaining) / 30f,
+                    progress = progress,
                     onDelete = { viewModel.deleteAccount(accountWithCode.account) }
                 )
             }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -35,11 +36,6 @@ class AccountViewModel @Inject constructor(
     fun onCreate() {
         scope.launch {
             launch { startTicker() }
-        }
-    }
-
-    fun onResume() {
-        scope.launch {
             launch { observeAccounts() }
         }
     }
@@ -53,15 +49,16 @@ class AccountViewModel @Inject constructor(
     @OptIn(ExperimentalTime::class)
     private suspend fun startTicker() {
         while (true) {
-            val now = Clock.System.now().toEpochMilliseconds()
-            val remaining = 30 - ((now / 1000) % 30).toInt()
-            _remainingSeconds.value = remaining
+            withContext(Dispatchers.Default) {
+                val now = Clock.System.now().toEpochMilliseconds()
+                val remaining = 30 - ((now / 1000) % 30).toInt()
+                _remainingSeconds.value = remaining
 
-            if (remaining == 30) {
-                // обновим коды
-                updateAccountCodes(_accounts.value.map { it.account })
+                if (remaining == 30) {
+                    // Обновляем коды
+                    updateAccountCodes(_accounts.value.map { it.account })
+                }
             }
-
             delay(1000L)
         }
     }
@@ -77,7 +74,6 @@ class AccountViewModel @Inject constructor(
     fun deleteAccount(account: Account) {
         scope.launch {
             deleteAccount.invoke(account)
-            observeAccounts()
         }
     }
 

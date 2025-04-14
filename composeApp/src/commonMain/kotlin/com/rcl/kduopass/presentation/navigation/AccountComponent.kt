@@ -4,7 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnDestroy
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.rcl.kduopass.di.AppComponent
 
 class AccountComponent(
@@ -22,9 +21,6 @@ class AccountComponent(
         }
         lifecycle.doOnDestroy {
             vm.onDestroy()
-        }
-        lifecycle.doOnResume {
-            vm.onResume()
         }
     }
 }
