@@ -1,7 +1,10 @@
 package com.rcl.kduopass.presentation.screens.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -27,11 +30,17 @@ fun TOTPProgressIndicator(
     code: String
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = tween(500),
-        label = "progress"
+    val infiniteTransition = rememberInfiniteTransition(label = "progressTransition")
+    val animatedProgress by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 30_000),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "animatedProgress"
     )
+
     val progressColor by animateColorAsState(
         targetValue = lerp(
             start = colorScheme.error,
@@ -42,7 +51,7 @@ fun TOTPProgressIndicator(
     )
 
     Box(
-        modifier = modifier.size(120.dp),
+        modifier = modifier.size(100.dp),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.fillMaxSize().padding(10.dp)) {
@@ -59,7 +68,7 @@ fun TOTPProgressIndicator(
             drawArc(
                 color = progressColor,
                 startAngle = -90f,
-                sweepAngle = 360f * animatedProgress,
+                sweepAngle = 360f * progress,
                 useCenter = false,
                 style = Stroke(strokeWidth, cap = StrokeCap.Round)
             )
@@ -68,7 +77,8 @@ fun TOTPProgressIndicator(
         Text(
             text = code,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }

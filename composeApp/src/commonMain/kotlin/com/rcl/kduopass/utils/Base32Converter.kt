@@ -33,7 +33,6 @@ fun ByteArray.toBase32(): String {
         index++
     }
 
-    // Дополняем строку символами '=' до длины, кратной 8
     while (index % 8 != 0) {
         result.append('=')
         index++

@@ -55,7 +55,6 @@ class AccountViewModel @Inject constructor(
                 _remainingSeconds.value = remaining
 
                 if (remaining == 30) {
-                    // Обновляем коды
                     updateAccountCodes(_accounts.value.map { it.account })
                 }
             }

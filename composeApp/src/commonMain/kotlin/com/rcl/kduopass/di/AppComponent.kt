@@ -15,12 +15,15 @@ import kotlinx.coroutines.IO
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
+@Singleton
 @Component
 abstract class AppComponent(
     @Component val platformComponent: PlatformSpecificComponents
 ) {
+    @Singleton
     @Provides
     fun accountRepository(impl: AccountRepositoryImpl): AccountRepository = impl
+    @Singleton
     @Provides
     fun provideDataBase(builder: RoomDatabase.Builder<AppDatabase>) = builder
         .fallbackToDestructiveMigrationOnDowngrade(false)
@@ -28,6 +31,7 @@ abstract class AppComponent(
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
 
+    @Singleton
     @Provides
     fun provideAccountDao(appDatabase: AppDatabase): AccountDao = appDatabase.accountDao()
     abstract val generateCodeUseCase: GenerateCodeUseCase
@@ -35,3 +39,4 @@ abstract class AppComponent(
     abstract fun accountViewModel(): AccountViewModel
     abstract fun addAccountViewModel(): AddAccountViewModel
 }
+
