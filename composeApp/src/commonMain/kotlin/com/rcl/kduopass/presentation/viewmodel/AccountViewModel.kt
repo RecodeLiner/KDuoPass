@@ -3,6 +3,7 @@ package com.rcl.kduopass.presentation.viewmodel
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.rcl.kduopass.domain.model.Account
 import com.rcl.kduopass.domain.repository.AccountRepository
+import com.rcl.kduopass.domain.usecase.DeleteAccountUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,8 @@ import kotlin.time.ExperimentalTime
 
 class AccountViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
-    private val generateTOTP: GenerateCodeUseCase
+    private val generateTOTP: GenerateCodeUseCase,
+    private val deleteAccount: DeleteAccountUseCase
 ) : InstanceKeeper.Instance {
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -32,8 +34,13 @@ class AccountViewModel @Inject constructor(
 
     fun onCreate() {
         scope.launch {
-            launch { observeAccounts() }
             launch { startTicker() }
+        }
+    }
+
+    fun onResume() {
+        scope.launch {
+            launch { observeAccounts() }
         }
     }
 
@@ -65,6 +72,13 @@ class AccountViewModel @Inject constructor(
             AccountWithCode(it, code)
         }
         _accounts.value = updated
+    }
+
+    fun deleteAccount(account: Account) {
+        scope.launch {
+            deleteAccount.invoke(account)
+            observeAccounts()
+        }
     }
 
     @OptIn(ExperimentalTime::class)

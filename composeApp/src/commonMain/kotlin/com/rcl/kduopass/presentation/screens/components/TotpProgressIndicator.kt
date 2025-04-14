@@ -1,17 +1,22 @@
 package com.rcl.kduopass.presentation.screens.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -19,35 +24,47 @@ import androidx.compose.ui.unit.dp
 fun TOTPProgressIndicator(
     modifier: Modifier = Modifier,
     progress: Float,
-    code: String,
+    code: String
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = tween(500),
+        label = "progress"
+    )
+    val progressColor by animateColorAsState(
+        targetValue = lerp(
+            start = colorScheme.error,
+            stop = colorScheme.primary,
+            fraction = animatedProgress.coerceIn(0f, 1f)
+        ),
+        label = "progressColor"
+    )
+
     Box(
-        modifier = modifier.size(100.dp),
+        modifier = modifier.size(120.dp),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
+        Canvas(modifier = Modifier.fillMaxSize().padding(10.dp)) {
             val strokeWidth = 8.dp.toPx()
-            val radius = size.minDimension / 2 - strokeWidth / 2
 
             drawArc(
-                color = Color.LightGray,
+                color = colorScheme.onSurface.copy(alpha = 0.2f),
                 startAngle = -90f,
                 sweepAngle = 360f,
                 useCenter = false,
                 style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
             )
 
-            // Прогресс
             drawArc(
-                color = if (progress > 0.2f) Color(0xFF4CAF50) else Color.Red,
+                color = progressColor,
                 startAngle = -90f,
-                sweepAngle = 360f * progress,
+                sweepAngle = 360f * animatedProgress,
                 useCenter = false,
-                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                style = Stroke(strokeWidth, cap = StrokeCap.Round)
             )
         }
 
-        // Код по центру
         Text(
             text = code,
             style = MaterialTheme.typography.titleLarge,
