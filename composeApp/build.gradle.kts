@@ -79,11 +79,11 @@ kotlin {
 
 android {
     namespace = "com.rcl.kduopass"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
 
         applicationId = "com.rcl.kduopass.androidApp"
         versionCode = 1
@@ -105,13 +105,13 @@ compose.desktop {
             packageVersion = "1.0.0"
 
             linux {
-                //iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
+                iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
             }
             windows {
-                //iconFile.set(project.file("desktopAppIcons/WindowsIcon.ico"))
+                iconFile.set(project.file("desktopAppIcons/WindowsIcon.ico"))
             }
             macOS {
-                //iconFile.set(project.file("desktopAppIcons/MacosIcon.icns"))
+                iconFile.set(project.file("desktopAppIcons/WindowsIcon.ico"))
                 bundleID = "com.rcl.kduopass.desktopApp"
             }
         }
