@@ -10,7 +10,6 @@ import androidx.room.RoomDatabase
 import com.arkivanov.decompose.defaultComponentContext
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.presentation.navigation.RootComponent
-import com.rcl.kduopass.presentation.screens.RootScreen
 
 
 class AppActivity : ComponentActivity() {
@@ -23,7 +22,7 @@ class AppActivity : ComponentActivity() {
             )
         enableEdgeToEdge()
         setContent {
-            RootScreen(root)
+            App(root)
         }
     }
 }

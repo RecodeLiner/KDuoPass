@@ -9,12 +9,12 @@ import androidx.room.RoomDatabase
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.rcl.kduopass.App
 import com.rcl.kduopass.InternalBuildConfig
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.AppComponent
 import com.rcl.kduopass.di.create
 import com.rcl.kduopass.presentation.navigation.RootComponent
-import com.rcl.kduopass.presentation.screens.RootScreen
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
 import org.jetbrains.jewel.intui.standalone.theme.createDefaultTextStyle
@@ -87,7 +87,7 @@ fun main() {
                         Text(title)
                     }
                     window.minimumSize = Dimension(350, 600)
-                    RootScreen(rootComponent)
+                    App(rootComponent)
                 },
             )
         }

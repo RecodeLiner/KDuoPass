@@ -10,10 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.rcl.kduopass.presentation.navigation.RootComponent
+import com.rcl.kduopass.presentation.screens.RootScreen
 import com.rcl.kduopass.presentation.theme.AppTheme
 
 @Composable
-internal fun App() = AppTheme {
+internal fun App(rootComponent: RootComponent) = AppTheme {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -21,6 +23,6 @@ internal fun App() = AppTheme {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
+        RootScreen(rootComponent)
     }
 }
