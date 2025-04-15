@@ -1,6 +1,6 @@
 package com.rcl.kduopass
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,12 +16,12 @@ import com.rcl.kduopass.presentation.theme.AppTheme
 
 @Composable
 internal fun App(rootComponent: RootComponent) = AppTheme {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing)
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
         RootScreen(rootComponent)
     }
