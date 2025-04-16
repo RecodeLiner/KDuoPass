@@ -2,6 +2,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import java.io.File
 
 @Suppress("unused")
 class BuildConfigPlugin : Plugin<Project> {
@@ -28,16 +29,49 @@ class BuildConfigPlugin : Plugin<Project> {
     }
 
     private fun configureSourceSet(project: Project, sourceSet: KotlinSourceSet, extension: BuildConfigExtension) {
-        val taskName = "generate${sourceSet.name.replaceFirstChar { it.uppercase() }}BuildConfig"
+        val sourceSetNameCapitalized = sourceSet.name.replaceFirstChar { it.uppercaseChar() }
+        val taskName = "generate${sourceSetNameCapitalized}BuildConfig"
         val outputDir = project.layout.buildDirectory.dir("generated/buildConfig/${sourceSet.name}/kotlin")
 
-        project.tasks.register(taskName, GenerateBuildConfigTask::class.java) {
+        sourceSet.kotlin.srcDir(outputDir)
+
+        val generateTaskProvider = project.tasks.register(taskName, GenerateBuildConfigTask::class.java) {
             this.outputDir.set(outputDir)
-            packageName.set(extension.packageName)
-            objectName.set(extension.objectName)
-            fields.set(extension.fields)
+            this.packageName.set(extension.packageName)
+            this.objectName.set(extension.objectName)
+            this.fields.set(extension.fields)
         }
 
-        sourceSet.kotlin.srcDirs(outputDir)
+        project.afterEvaluate {
+            val dir = outputDir.get().asFile
+            val stubFile = File(dir, "${extension.objectName}.kt")
+            if (!stubFile.exists()) {
+                dir.mkdirs()
+                stubFile.writeText(
+                    """
+            |// GENERATED STUB
+            |package ${extension.packageName}
+            |
+            |/** Temporary stub, will be overwritten during build **/
+            |object ${extension.objectName} {}
+            """.trimMargin()
+                )
+            }
+        }
+
+        val compileTaskName = "compileKotlin$sourceSetNameCapitalized"
+        project.tasks.matching { it.name == compileTaskName }.configureEach {
+            dependsOn(generateTaskProvider)
+        }
+
+        // Привязываем к build
+        project.tasks.named("build").configure {
+            dependsOn(generateTaskProvider)
+        }
+
+        // Привязываем к Gradle sync через prepareKotlinIdeaImport
+        project.tasks.matching { it.name == "prepareKotlinIdeaImport" }.configureEach {
+            dependsOn(generateTaskProvider)
+        }
     }
 }
