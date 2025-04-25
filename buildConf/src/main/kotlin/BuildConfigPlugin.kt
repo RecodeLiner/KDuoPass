@@ -30,12 +30,14 @@ class BuildConfigPlugin : Plugin<Project> {
 
     private fun configureSourceSet(project: Project, sourceSet: KotlinSourceSet, extension: BuildConfigExtension) {
         val sourceSetNameCapitalized = sourceSet.name.replaceFirstChar { it.uppercaseChar() }
+        val group = "buildConfig"
         val taskName = "generate${sourceSetNameCapitalized}BuildConfig"
         val outputDir = project.layout.buildDirectory.dir("generated/buildConfig/${sourceSet.name}/kotlin")
 
         sourceSet.kotlin.srcDir(outputDir)
 
         val generateTaskProvider = project.tasks.register(taskName, GenerateBuildConfigTask::class.java) {
+            this.group = group
             this.outputDir.set(outputDir)
             this.packageName.set(extension.packageName)
             this.objectName.set(extension.objectName)

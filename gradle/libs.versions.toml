@@ -1,25 +1,24 @@
 [versions]
 
 kotlin = "2.1.20"
-compose = "1.8.0-beta02"
-agp = "8.9.1"
+compose = "1.8.0-rc01"
+agp = "8.9.2"
 androidx-activityCompose = "1.10.1"
 kotlinx-coroutines = "1.10.2"
 decompose = "3.3.0"
 kotlinx-serialization = "1.8.1"
 coil = "3.1.0"
-java = "21"
-room = "2.7.0"
+java = "17"
+room = "2.7.1"
 ksp = "2.1.20-1.0.31"
-buildKonfig = "0.17.0"
-jewel = "0.19.7"
+jewel = "0.27.0"
 kotlin-inject="0.7.2"
 sqlite = "2.5.0"
 
 [libraries]
 
-jewel = { group = "org.jetbrains.jewel", name = "jewel-int-ui-standalone-242", version.ref = "jewel" }
-jewel-decorate = { group = "org.jetbrains.jewel", name = "jewel-int-ui-decorated-window-242", version.ref = "jewel" }
+jewel = { group = "org.jetbrains.jewel", name = "jewel-int-ui-standalone-243", version.ref = "jewel" }
+jewel-decorate = { group = "org.jetbrains.jewel", name = "jewel-int-ui-decorated-window-243", version.ref = "jewel" }
 androidx-activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activityCompose" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -49,4 +48,3 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
