@@ -31,8 +31,7 @@ fun AddAccountScreen(
     viewModel: AddAccountViewModel,
     navigateBack: () -> Unit
 ) {
-    var serviceName by remember { mutableStateOf("") }
-    var secretKey by remember { mutableStateOf("") }
+    var state by remember { mutableStateOf(AddAccountState()) }
 
     Scaffold(
         topBar = {
@@ -52,31 +51,28 @@ fun AddAccountScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            Text("Add New Account")
-            Spacer(modifier = Modifier.padding(8.dp))
-
             TextField(
-                value = serviceName,
-                onValueChange = { serviceName = it },
+                value = state.serviceName,
+                onValueChange = { state = state.copy(serviceName = it) },
                 label = { Text("Service Name") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.padding(16.dp))
 
             TextField(
-                value = secretKey,
-                onValueChange = { secretKey = it },
+                value = state.secret,
+                onValueChange = { state = state.copy(secret = it) },
                 label = { Text("Secret Key") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.padding(16.dp))
+            Spacer(modifier = Modifier.padding(24.dp))
 
             Button(
                 onClick = {
                     val account = Account(
                         id = 0,
-                        serviceName = serviceName,
-                        secret = secretKey
+                        serviceName = state.serviceName,
+                        secret = state.secret
                     )
                     viewModel.addAccount(account) {
                         navigateBack()
@@ -89,3 +85,8 @@ fun AddAccountScreen(
         }
     }
 }
+
+data class AddAccountState(
+    val serviceName: String = "",
+    val secret: String = ""
+)

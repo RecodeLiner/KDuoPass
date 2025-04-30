@@ -1,10 +1,6 @@
 package com.rcl.kduopass.presentation.screens.components
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -30,24 +26,16 @@ fun TOTPProgressIndicator(
     code: String
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val infiniteTransition = rememberInfiniteTransition(label = "progressTransition")
-    val animatedProgress by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 30_000),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "animatedProgress"
-    )
 
-    val progressColor by animateColorAsState(
-        targetValue = lerp(
-            start = colorScheme.error,
-            stop = colorScheme.primary,
-            fraction = animatedProgress.coerceIn(0f, 1f)
-        ),
-        label = "progressColor"
+    val animatedColor by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = tween(durationMillis = 1000),
+        label = "colorProgress"
+    )
+    val progressColor = lerp(
+        start = colorScheme.error,
+        stop = colorScheme.primary,
+        fraction = animatedColor.coerceIn(0f, 1f)
     )
 
     Box(

@@ -68,10 +68,7 @@ kotlin {
 
         jvmMain.configure {
             dependencies {
-                implementation(libs.bundles.jewel)
-                implementation(compose.desktop.currentOs) {
-                    exclude(group = "org.jetbrains.compose.material")
-                }
+                implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.swing)
             }
         }

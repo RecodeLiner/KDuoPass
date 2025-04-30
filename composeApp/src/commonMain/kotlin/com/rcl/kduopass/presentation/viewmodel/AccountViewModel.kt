@@ -9,15 +9,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 class AccountViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
@@ -30,35 +26,15 @@ class AccountViewModel @Inject constructor(
     private val _accounts = MutableStateFlow<List<AccountWithCode>>(emptyList())
     val accounts: StateFlow<List<AccountWithCode>> = _accounts.asStateFlow()
 
-    private val _remainingSeconds = MutableStateFlow(secondsUntilNextTick())
-    val remainingSeconds: StateFlow<Int> = _remainingSeconds.asStateFlow()
-
     fun onCreate() {
         scope.launch {
-            launch { startTicker() }
-            launch { observeAccounts() }
+            observeAccounts()
         }
     }
 
     private suspend fun observeAccounts() {
         accountRepository.getAccounts().collect { accountList ->
             updateAccountCodes(accountList)
-        }
-    }
-
-    @OptIn(ExperimentalTime::class)
-    private suspend fun startTicker() {
-        while (true) {
-            withContext(Dispatchers.Default) {
-                val now = Clock.System.now().toEpochMilliseconds()
-                val remaining = 30 - ((now / 1000) % 30).toInt()
-                _remainingSeconds.value = remaining
-
-                if (remaining == 30) {
-                    updateAccountCodes(_accounts.value.map { it.account })
-                }
-            }
-            delay(1000L)
         }
     }
 
@@ -74,12 +50,6 @@ class AccountViewModel @Inject constructor(
         scope.launch {
             deleteAccount.invoke(account)
         }
-    }
-
-    @OptIn(ExperimentalTime::class)
-    private fun secondsUntilNextTick(): Int {
-        val now = Clock.System.now().toEpochMilliseconds()
-        return 30 - ((now / 1000) % 30).toInt()
     }
 
     override fun onDestroy() {

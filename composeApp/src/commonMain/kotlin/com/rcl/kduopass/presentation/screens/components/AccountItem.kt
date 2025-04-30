@@ -1,5 +1,6 @@
 package com.rcl.kduopass.presentation.screens.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,13 +44,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun AccountItem(
     accountWithCode: AccountWithCode,
-    progress: Float,
+    secondsRemaining: Int,
     onDelete: () -> Unit
 ) {
     var showSecret by remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val currentSecondsRemaining by rememberUpdatedState(newValue = secondsRemaining)
+    val progress = (30 - currentSecondsRemaining) / 30f
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        label = "animatedProgress"
+    )
 
     Card(
         modifier = Modifier
@@ -82,7 +90,7 @@ fun AccountItem(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 TOTPProgressIndicator(
-                    progress = progress,
+                    progress = animatedProgress,
                     code = accountWithCode.code,
                     modifier = Modifier.size(100.dp)
                 )
@@ -90,18 +98,18 @@ fun AccountItem(
                 Column {
                     Text(
                         text = if (showSecret) accountWithCode.account.secret else "•••••",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .clickable { showSecret = !showSecret }
                             .padding(vertical = 4.dp)
                     )
 
-                    CopyButton(label = "Copy Code") {
+                    CopyTextButton(label = "Copy Code") {
                         clipboardManager.setText(AnnotatedString(accountWithCode.code))
                         scope.launch { snackbarHostState.showSnackbar("Code copied") }
                     }
 
-                    CopyButton(label = "Copy Secret") {
+                    CopyTextButton(label = "Copy Secret") {
                         clipboardManager.setText(AnnotatedString(accountWithCode.account.secret))
                         scope.launch { snackbarHostState.showSnackbar("Secret copied") }
                     }
@@ -114,7 +122,7 @@ fun AccountItem(
 }
 
 @Composable
-private fun CopyButton(label: String, onClick: () -> Unit) {
+private fun CopyTextButton(label: String, onClick: () -> Unit) {
     TextButton(onClick = onClick) {
         Text(text = label)
     }
