@@ -6,6 +6,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushToFront
 import com.rcl.kduopass.di.AppComponent
+import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.AccountsChild
+import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.AddAccountChild
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -33,14 +35,16 @@ class RootComponent(
 
     private fun createChild(config: ScreenConfig, context: ComponentContext): ComponentChild {
         return when (config) {
-            ScreenConfig.Accounts -> ComponentChild.AccountsChild(AccountComponent(context, appComponent))
-            ScreenConfig.AddAccount -> ComponentChild.AddAccountChild(AddAccountComponent(context, appComponent))
+            ScreenConfig.Accounts -> AccountsChild(AccountComponent(context, appComponent.accountFactory))
+            ScreenConfig.AddAccount -> AddAccountChild(AddAccountComponent(context, appComponent.addAccountFactory))
+            ScreenConfig.Settings -> ComponentChild.SettingsChild(SettingsComponent(context, appComponent.settingsFactory))
         }
     }
 
     sealed class ComponentChild {
         data class AccountsChild(val components: AccountComponent) : ComponentChild()
         data class AddAccountChild(val components: AddAccountComponent) : ComponentChild()
+        data class SettingsChild(val components: SettingsComponent) : ComponentChild()
     }
     @Serializable
     sealed interface ScreenConfig {
@@ -49,5 +53,7 @@ class RootComponent(
 
         @Serializable
         data object AddAccount : ScreenConfig
+        @Serializable
+        data object Settings : ScreenConfig
     }
 }

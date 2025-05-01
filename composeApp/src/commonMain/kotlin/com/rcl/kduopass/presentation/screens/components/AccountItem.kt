@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rcl.kduopass.presentation.viewmodel.AccountWithCode
+import com.rcl.kduopass.presentation.viewmodel.components.AccountWithCode
 import kotlinx.coroutines.launch
 
 @Composable

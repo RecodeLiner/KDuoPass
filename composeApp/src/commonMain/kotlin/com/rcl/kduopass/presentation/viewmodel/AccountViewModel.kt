@@ -1,10 +1,11 @@
 package com.rcl.kduopass.presentation.viewmodel
 
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.rcl.kduopass.domain.model.Account
 import com.rcl.kduopass.domain.repository.AccountRepository
 import com.rcl.kduopass.domain.usecase.DeleteAccountUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
+import com.rcl.kduopass.presentation.viewmodel.components.AccountWithCode
+import com.rcl.kduopass.presentation.viewmodel.components.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -19,14 +20,28 @@ class AccountViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val generateTOTP: GenerateCodeUseCase,
     private val deleteAccount: DeleteAccountUseCase
-) : InstanceKeeper.Instance {
+) : ViewModelComponent() {
+    class AccountViewModelFactory @Inject constructor(
+        private val accountRepository: AccountRepository,
+        private val generateTOTP: GenerateCodeUseCase,
+        private val deleteAccount: DeleteAccountUseCase
+    ) : ViewModelFactory<AccountViewModel> {
+        override fun create() =
+            AccountViewModel(
+                accountRepository,
+                generateTOTP,
+                deleteAccount
+            )
+
+    }
+
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
     private val _accounts = MutableStateFlow<List<AccountWithCode>>(emptyList())
     val accounts: StateFlow<List<AccountWithCode>> = _accounts.asStateFlow()
 
-    fun onCreate() {
+    override fun onCreate() {
         scope.launch {
             observeAccounts()
         }

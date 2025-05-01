@@ -1,6 +1,7 @@
 package com.rcl.kduopass
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,9 @@ class AppActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             App(root)
+        }
+        if (intent.action == Intent.ACTION_APPLICATION_PREFERENCES) {
+            root.navigateTo(RootComponent.ScreenConfig.Settings)
         }
     }
 }

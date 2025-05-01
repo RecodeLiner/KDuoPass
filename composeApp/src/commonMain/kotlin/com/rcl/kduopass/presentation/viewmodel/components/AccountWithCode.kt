@@ -1,4 +1,4 @@
-package com.rcl.kduopass.presentation.viewmodel
+package com.rcl.kduopass.presentation.viewmodel.components
 
 import com.rcl.kduopass.domain.model.Account
 

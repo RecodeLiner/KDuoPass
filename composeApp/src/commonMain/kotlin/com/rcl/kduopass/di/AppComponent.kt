@@ -10,6 +10,7 @@ import com.rcl.kduopass.domain.usecase.AddAccountUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
 import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
 import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
+import com.rcl.kduopass.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import me.tatarka.inject.annotations.Component
@@ -36,7 +37,8 @@ abstract class AppComponent(
     fun provideAccountDao(appDatabase: AppDatabase): AccountDao = appDatabase.accountDao()
     abstract val generateCodeUseCase: GenerateCodeUseCase
     abstract val addAccountUseCase: AddAccountUseCase
-    abstract fun accountViewModel(): AccountViewModel
-    abstract fun addAccountViewModel(): AddAccountViewModel
+    abstract val accountFactory: AccountViewModel.AccountViewModelFactory
+    abstract val addAccountFactory: AddAccountViewModel.AddAccountViewModelFactory
+    abstract val settingsFactory: SettingsViewModel.SettingsViewModelFactory
 }
 
