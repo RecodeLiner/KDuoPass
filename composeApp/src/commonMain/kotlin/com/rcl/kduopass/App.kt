@@ -20,7 +20,7 @@ internal fun App(rootComponent: RootComponent) = AppTheme {
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing)
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center
     ) {
         RootScreen(rootComponent)

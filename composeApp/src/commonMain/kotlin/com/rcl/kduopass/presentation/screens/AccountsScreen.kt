@@ -9,8 +9,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +34,7 @@ import kotlinx.coroutines.delay
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountListScreen(
     viewModel: AccountViewModel,
@@ -52,6 +57,21 @@ fun AccountListScreen(
             }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add new account")
             }
+        },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    //TODO: remove hardcode string
+                    Text("Accounts")
+                },
+                actions = {
+                    IconButton(onClick = {
+                        navigateTo(RootComponent.ScreenConfig.Settings)
+                    }) {
+                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                    }
+                }
+            )
         }
     ) { paddingValues ->
         if (accounts.isEmpty()) {

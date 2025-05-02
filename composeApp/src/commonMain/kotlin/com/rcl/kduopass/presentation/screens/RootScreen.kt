@@ -44,7 +44,7 @@ fun RootScreen(rootComponent: RootComponent) {
 
             is RootComponent.ComponentChild.SettingsChild -> SettingsScreen(
                 child.components.vm,
-                rootComponent::navigateTo
+                rootComponent::navigateBack,
             )
         }
     }
