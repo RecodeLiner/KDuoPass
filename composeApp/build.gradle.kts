@@ -40,6 +40,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.decompose)
                 implementation(libs.decompose.compose)
+                implementation(libs.decompose.experiments)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.coil)
                 implementation(libs.coil.network.ktor)

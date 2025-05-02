@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="KDuoPass"
         android:theme="@android:style/Theme.Material.NoActionBar"
-        android:name=".App">
+        android:enableOnBackInvokedCallback="true"
+        android:name=".App"
+        tools:targetApi="33">
         <activity
             android:name=".AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

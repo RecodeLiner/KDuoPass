@@ -1,4 +1,6 @@
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -39,6 +41,16 @@ fun main() {
                 window.minimumSize = Dimension(350, 600)
                 App(rootComponent)
             },
+            onKeyEvent = {
+                when (it.key) {
+                    Key.Escape, Key.Backspace, Key.Back -> {
+                        rootComponent.navigateBack()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
         )
     }
 }
