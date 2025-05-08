@@ -11,15 +11,18 @@ import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.rcl.kduopass.App
 import com.rcl.kduopass.InternalBuildConfig
+import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.AppComponent
 import com.rcl.kduopass.di.create
 import com.rcl.kduopass.presentation.navigation.RootComponent
+import io.github.vinceglb.filekit.FileKit
 import java.awt.Dimension
 import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
 fun main() {
+    FileKit.init(appId = APP_NAME)
     val lifecycle = LifecycleRegistry()
     val appComponent = AppComponent::class.create(JvmPlatformComponent::class.create())
 

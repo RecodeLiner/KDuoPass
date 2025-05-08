@@ -1,23 +1,31 @@
 package com.rcl.kduopass.data.repository
 
 import com.rcl.kduopass.data.database.AccountDao
-import com.rcl.kduopass.data.mapper.toDomainModel
-import com.rcl.kduopass.data.mapper.toEntity
-import com.rcl.kduopass.domain.model.Account
+import com.rcl.kduopass.data.database.AccountEntity
 import com.rcl.kduopass.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
 class AccountRepositoryImpl @Inject constructor(
     private val dao: AccountDao
 ) : AccountRepository {
-    override fun getAccounts(): Flow<List<Account>> =
-        dao.getAccounts().map { it.map { entity -> entity.toDomainModel() } }
+    override fun getAccounts(): Flow<List<AccountEntity>> =
+        dao.getAccounts()
 
-    override suspend fun addAccount(account: Account) =
-        dao.insertAccount(account.toEntity())
+    override suspend fun addAccount(account: AccountEntity) =
+        dao.insertAccount(account)
 
-    override suspend fun deleteAccount(account: Account) =
-        dao.deleteAccount(account.toEntity())
+    override suspend fun deleteAccount(account: AccountEntity) =
+        dao.deleteAccount(account)
+
+    override suspend fun deleteAllAccounts() {
+        dao.deleteAllAccounts()
+    }
+
+    override suspend fun insertAccountList(accounts: List<AccountEntity>) {
+        dao.insertAccountList(accounts)
+    }
+
+    override suspend fun getAccountsBatch(limit: Int, offset: Int): List<AccountEntity> =
+        dao.getAccountsBatch(limit, offset)
 }

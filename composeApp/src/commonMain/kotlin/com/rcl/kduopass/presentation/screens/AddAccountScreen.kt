@@ -22,8 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rcl.kduopass.domain.model.Account
+import com.rcl.kduopass.data.database.AccountEntity
 import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
+import kduopass.composeapp.generated.resources.Res
+import kduopass.composeapp.generated.resources.add_account_screen_save
+import kduopass.composeapp.generated.resources.add_account_screen_secret
+import kduopass.composeapp.generated.resources.add_account_screen_service_name
+import kduopass.composeapp.generated.resources.add_account_screen_title
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +42,7 @@ fun AddAccountScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Add New Account") },
+                title = { Text(stringResource(Res.string.add_account_screen_title)) },
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -54,7 +60,7 @@ fun AddAccountScreen(
             TextField(
                 value = state.serviceName,
                 onValueChange = { state = state.copy(serviceName = it) },
-                label = { Text("Service Name") },
+                label = { Text(stringResource(Res.string.add_account_screen_service_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.padding(16.dp))
@@ -62,15 +68,14 @@ fun AddAccountScreen(
             TextField(
                 value = state.secret,
                 onValueChange = { state = state.copy(secret = it) },
-                label = { Text("Secret Key") },
+                label = { Text(stringResource(Res.string.add_account_screen_secret)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.padding(24.dp))
 
             Button(
                 onClick = {
-                    val account = Account(
-                        id = 0,
+                    val account = AccountEntity(
                         serviceName = state.serviceName,
                         secret = state.secret
                     )
@@ -80,7 +85,7 @@ fun AddAccountScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save")
+                Text(stringResource(Res.string.add_account_screen_save))
             }
         }
     }

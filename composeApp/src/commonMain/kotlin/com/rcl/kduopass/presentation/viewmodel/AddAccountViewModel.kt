@@ -1,6 +1,6 @@
 package com.rcl.kduopass.presentation.viewmodel
 
-import com.rcl.kduopass.domain.model.Account
+import com.rcl.kduopass.data.database.AccountEntity
 import com.rcl.kduopass.domain.usecase.AddAccountUseCase
 import com.rcl.kduopass.presentation.viewmodel.components.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +21,7 @@ class AddAccountViewModel @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
-    fun addAccount(account: Account, onAccountAdded: () -> Unit) {
+    fun addAccount(account: AccountEntity, onAccountAdded: () -> Unit) {
         scope.launch {
             addAccountUseCase(account)
             onAccountAdded()

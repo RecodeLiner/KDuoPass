@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">KDuoPass</string>
+    <string name="import_select">Select file to import</string>
+    <string name="settings_title">Settings</string>
+    <string name="accounts_title">Accounts</string>
+    <string name="settings_export_accounts">Export Accounts</string>
+    <string name="settings_import_accounts_clean">Import Accounts(clean)</string>
+    <string name="settings_import_accounts_append">Import Accounts(append)</string>
+    <string name="empty_accounts_placeholder">No accounts yet</string>
+    <string name="add_account_screen_title">Add New Account</string>
+    <string name="add_account_screen_service_name">Service Name</string>
+    <string name="add_account_screen_secret">Secret</string>
+    <string name="add_account_screen_save">Save</string>
+</resources>

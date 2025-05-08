@@ -30,7 +30,11 @@ import androidx.compose.ui.unit.dp
 import com.rcl.kduopass.presentation.navigation.RootComponent
 import com.rcl.kduopass.presentation.screens.components.AccountItem
 import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
+import kduopass.composeapp.generated.resources.Res
+import kduopass.composeapp.generated.resources.accounts_title
+import kduopass.composeapp.generated.resources.empty_accounts_placeholder
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -61,8 +65,7 @@ fun AccountListScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    //TODO: remove hardcode string
-                    Text("Accounts")
+                    Text(stringResource(Res.string.accounts_title))
                 },
                 actions = {
                     IconButton(onClick = {
@@ -79,8 +82,7 @@ fun AccountListScreen(
                 modifier = Modifier.fillMaxSize().padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //TODO: remove hardcode string
-                Text("No accounts yet")
+                Text(stringResource(Res.string.empty_accounts_placeholder))
             }
         } else {
             LazyVerticalGrid(

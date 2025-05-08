@@ -7,6 +7,7 @@ import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.data.repository.AccountRepositoryImpl
 import com.rcl.kduopass.domain.repository.AccountRepository
 import com.rcl.kduopass.domain.usecase.AddAccountUseCase
+import com.rcl.kduopass.domain.usecase.FileAccountsUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
 import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
 import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
@@ -37,6 +38,7 @@ abstract class AppComponent(
     fun provideAccountDao(appDatabase: AppDatabase): AccountDao = appDatabase.accountDao()
     abstract val generateCodeUseCase: GenerateCodeUseCase
     abstract val addAccountUseCase: AddAccountUseCase
+    abstract val fileAccountsUseCase: FileAccountsUseCase
     abstract val accountFactory: AccountViewModel.AccountViewModelFactory
     abstract val addAccountFactory: AddAccountViewModel.AddAccountViewModelFactory
     abstract val settingsFactory: SettingsViewModel.SettingsViewModelFactory

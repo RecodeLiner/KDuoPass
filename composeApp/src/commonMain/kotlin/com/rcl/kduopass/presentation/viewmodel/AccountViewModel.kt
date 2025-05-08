@@ -1,6 +1,6 @@
 package com.rcl.kduopass.presentation.viewmodel
 
-import com.rcl.kduopass.domain.model.Account
+import com.rcl.kduopass.data.database.AccountEntity
 import com.rcl.kduopass.domain.repository.AccountRepository
 import com.rcl.kduopass.domain.usecase.DeleteAccountUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
@@ -53,7 +53,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun updateAccountCodes(accounts: List<Account>) {
+    private fun updateAccountCodes(accounts: List<AccountEntity>) {
         val updated = accounts.map {
             val code = generateTOTP(it.secret)
             AccountWithCode(it, code)
@@ -61,7 +61,7 @@ class AccountViewModel @Inject constructor(
         _accounts.value = updated
     }
 
-    fun deleteAccount(account: Account) {
+    fun deleteAccount(account: AccountEntity) {
         scope.launch {
             deleteAccount.invoke(account)
         }

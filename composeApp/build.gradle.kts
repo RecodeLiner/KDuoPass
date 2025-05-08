@@ -43,6 +43,8 @@ kotlin {
                 implementation(libs.decompose.experiments)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.coil)
+                implementation(compose.components.resources)
+                implementation(libs.bundles.fileKit)
                 implementation(libs.coil.network.ktor)
                 implementation(libs.room.runtime)
                 implementation(libs.sqlite.bundled)
@@ -120,6 +122,7 @@ compose.desktop {
 
             linux {
                 iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
+                modules("jdk.security.auth")
             }
             windows {
                 iconFile.set(project.file("desktopAppIcons/WindowsIcon.ico"))

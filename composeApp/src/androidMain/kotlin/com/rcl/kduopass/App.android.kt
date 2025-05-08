@@ -11,11 +11,14 @@ import androidx.room.RoomDatabase
 import com.arkivanov.decompose.defaultComponentContext
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.presentation.navigation.RootComponent
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.init
 
 
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FileKit.init(this)
         val root =
             RootComponent(
                 componentContext = defaultComponentContext(),

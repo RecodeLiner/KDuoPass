@@ -17,4 +17,10 @@ interface AccountDao {
 
     @Delete
     suspend fun deleteAccount(account: AccountEntity)
+    @Query("DELETE FROM accounts")
+    suspend fun deleteAllAccounts()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAccountList(accounts: List<AccountEntity>)
+    @Query("SELECT * FROM accounts LIMIT :limit OFFSET :offset")
+    suspend fun getAccountsBatch(limit: Int, offset: Int): List<AccountEntity>
 }
