@@ -1,65 +1,148 @@
-# KduoPass
+# KDuoPass
 
-KduoPass is a **multi-platform application for managing Time-based One-time Passwords (TOTP)**. It allows you to securely store your service names and secret keys, and it generates the corresponding TOTP codes for two-factor authentication. This application is built using **Kotlin Multiplatform**, leveraging **Jetpack Compose** for the user interface across **Android, iOS, and JVM Desktop**.
+KDuoPass is a cross-platform, open-source two-factor authentication (2FA) application built using **Kotlin Multiplatform** and **Jetpack Compose**. It allows users to manage and generate Time-Based One-Time Passwords (TOTP) for their accounts securely across **Android**, **iOS**, **Desktop** (Windows, macOS, Linux), and potentially other platforms. The app supports importing/exporting accounts, a clean user interface, and robust data persistence using Room database.
 
-## Key Features
+## Features
 
-*   **Secure Account Storage:** Store your service names and secret keys securely within a local database.
-*   **TOTP Code Generation:** Generate time-based one-time passwords from your stored secrets using the **TOTP algorithm**.
-*   **Real-time Code Updates:** The application displays the current TOTP code, which updates automatically every 30 seconds, indicated by a progress indicator.
-*   **Code and Secret Copying:** Easily copy the generated TOTP code or the secret key to your device's clipboard.
-*   **Add New Accounts:** Add new service accounts by providing a service name and its secret key.
-*   **Delete Accounts:** Remove stored accounts when they are no longer needed.
+- **TOTP Generation**: Generate secure 6-digit TOTP codes for 2FA based on user-provided secrets.
+- **Cross-Platform Support**: Runs on Android, iOS, and Desktop (Windows, macOS, Linux) with a consistent UI/UX.
+- **Account Management**:
+    - Add new accounts with service name and secret key.
+    - Delete individual accounts or clear all accounts.
+    - Import/export accounts in JSON format for easy backup and transfer.
+- **Real-Time Code Refresh**: Automatically refreshes TOTP codes every 30 seconds with a visual progress indicator.
+- **Clipboard Support**: Copy TOTP codes or secrets to the clipboard with a single tap/click.
+- **Responsive UI**: Built with Jetpack Compose for a modern, adaptive, and theme-aware interface.
+- **Localization**: Supports multiple languages (e.g., English and Russian).
+- **Secure Storage**: Uses Room database with SQLite for persistent and secure account storage.
+- **Dependency Injection**: Utilizes Koin for modular and testable dependency management.
+- **Custom Gradle Plugin**: Includes a custom `buildConfig` plugin to generate build-time constants.
 
-## Architecture and Components
+## Screenshots
 
-KduoPass follows a clean architecture with distinct layers to ensure separation of concerns:
+![Mobile Screenshot](screenshots/Mobile.png)
+![Desktop Screenshot](screenshots/Desktop.png)
 
-*   **Presentation Layer:**
-    *   Built with **Jetpack Compose** for a declarative UI that adapts to different platforms.
-    *   Utilises **Material Design 3** components for a modern and consistent user experience.
-    *   Manages UI state and logic using **ViewModels** (`AccountViewModel` and `AddAccountViewModel`).
-    *   Handles screen navigation using **Arkivanov's Decompose** library (`RootComponent`, `AccountComponent`, `AddAccountComponent`).
-    *   Provides composable screens (`AccountListScreen`, `AddAccountScreen`, `RootScreen`) and UI elements (`AccountItem`, `TOTPProgressIndicator`).
-*   **Domain Layer:**
-    *   Contains the core business logic and use cases:
-        *   `AddAccountUseCase`: Adds a new account.
-        *   `DeleteAccountUseCase`: Deletes an existing account.
-        *   `GenerateCodeUseCase`: Generates the TOTP code from a secret.
-        *   `GetAccountsUseCase`: Retrieves the list of stored accounts.
-    *   Defines the `Account` data model and the `AccountRepository` interface.
-*   **Data Layer:**
-    *   Uses **Room Persistence Library** to manage a local SQLite database for storing `AccountEntity` objects.
-    *   Defines the `AccountDao` interface for database interactions.
-    *   Implements the `AccountRepository` interface (`AccountRepositoryImpl`) to handle data access.
-    *   Includes `AccountMapper` to convert between domain models (`Account`) and database entities (`AccountEntity`).
-*   **Dependency Injection:**
-    *   Utilises **Tatarka Inject** for managing dependencies throughout the application (`AppComponent`, `AndroidPlatformComponent`, `JvmPlatformComponent`).
-*   **Utilities:**
-    *   `TOTPUtils`: Contains the logic for generating TOTP codes using the provided secret key and the current time.
-    *   `Base32Converter`: Provides functions to encode and decode secret keys from Base32 format.
+## Getting Started
 
-## Platform Specifics
+### Prerequisites
 
-*   **Android:** The Android application entry point is `AppActivity`. It initialises the root component and sets up the Compose UI. The database file is stored as `dpkss.db`.
-*   **iOS:** The iOS application is launched via `MainViewController` which hosts the Compose UI.
-*   **JVM Desktop:** The JVM Desktop application uses **Jewel UI** components in addition to Compose for the main window. The database file is stored as `user.db` in the system's temporary directory.
+- **JDK**: Version 17 or higher.
+- **Gradle**: Version 8.0 or higher (included in the wrapper).
+- **Android SDK**: For Android builds (API 21+).
+- **Xcode**: For iOS builds (required for iOS simulator or device deployment).
+- **Kotlin Multiplatform Plugin**: Ensure your IDE (e.g., IntelliJ IDEA or Android Studio) has the Kotlin Multiplatform plugin installed.
 
-## Building the Application
+### Installation
 
-As KduoPass is a Kotlin Multiplatform project, you will need to use **Gradle** to build the application for the target platforms. The specific build steps will depend on the platform you are targeting and your local development environment. Generally, you would use the Gradle tasks provided in the project's `build.gradle.kts` files.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/RecodeLiner/KDuoPass.git
+   cd KDuoPass
+   ```
 
-## Key Dependencies
+2. **Set Up the Project**:
+    - Open the project in **IntelliJ IDEA** or **Android Studio**.
+    - Sync the project with Gradle to download dependencies.
 
-KduoPass relies on the following key libraries:
+3. **Build the Project**:
+   ```bash
+   ./gradlew build
+   ```
 
-*   **AndroidX:** Compose UI, Activity Compose, Room Persistence, Appcompat.
-*   **Arkivanov Decompose:** For managing component lifecycles and navigation.
-*   **Tatarka Inject:** For dependency injection.
-*   **Kotlin Coroutines:** For asynchronous programming.
-*   **KotlinX Serialization:** For serializing navigation state.
-*   **SQLite:** Bundled driver for database access.
-*   **Okio:** For efficient I/O operations, used in TOTP code generation.
-*   **Jewel UI (JVM Desktop):** A library for building desktop applications with Compose.
+4. **Run the App**:
+    - **Android**: Connect an Android device/emulator and run:
+      ```bash
+      ./gradlew :composeApp:assembleRelease
+      ```
+    - **Desktop**: Run the desktop app:
+      ```bash
+      ./gradlew :composeApp:run
+      ```
+    - **iOS**: Open the iOS target in Xcode via the generated project in `composeApp/iosApp` and run on a simulator or device.
 
-This README provides a high-level overview of the KduoPass application. For more detailed information, please refer to the source code.
+### Project Structure
+
+- **composeApp**: Contains the main application code, including:
+    - **src/commonMain**: Shared Kotlin code for all platforms (UI, business logic, database).
+    - **src/androidMain**: Android-specific code (e.g., AndroidManifest, platform-specific DI).
+    - **src/jvmMain**: Desktop-specific code (e.g., Swing integration, file system handling).
+    - **src/iosMain**: iOS-specific code (e.g., UIKit integration).
+- **buildConf**: Custom Gradle plugin for generating build configuration constants.
+- **gradle**: Gradle wrapper and configuration files.
+
+### Key Technologies
+
+- **Kotlin Multiplatform**: For sharing code across platforms.
+- **Jetpack Compose**: For building the UI.
+- **Room Database**: For local data persistence.
+- **Decompose**: For navigation and component-based architecture.
+- **Kotlinx Serialization**: For JSON-based import/export.
+- **Kotlin-inject**: For dependency injection.
+- **FileKit**: For cross-platform file handling.
+- **Gradle**: For build automation with a custom plugin.
+
+## Usage
+
+1. **Add an Account**:
+    - Navigate to the "Add Account" screen via the floating action button.
+    - Enter the service name and secret key (Base32-encoded).
+    - Save to generate TOTP codes.
+
+2. **View TOTP Codes**:
+    - The main screen displays all accounts with their current TOTP codes.
+    - Codes refresh every 30 seconds, with a progress indicator showing the remaining time.
+
+3. **Copy Codes/Secrets**:
+    - Click the "Copy Code" or "Copy Secret" buttons to copy to the clipboard.
+    - A snackbar confirms the action.
+
+4. **Import/Export Accounts**:
+    - Go to the "Settings" screen.
+    - Export accounts to a JSON file or import accounts from a JSON file (clean or append modes).
+
+5. **Delete Accounts**:
+    - Delete individual accounts from the main screen.
+    - Optionally, clear all accounts during import (clean mode).
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Make your changes and commit (`git commit -m "Add your feature"`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a pull request.
+
+Please ensure your code follows the project's coding style and includes tests where applicable.
+
+## License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+## Testing
+
+The project includes unit tests and UI tests:
+
+- **Unit Tests**: Located in `composeApp/src/commonTest`.
+- **UI Tests**: Basic Compose UI tests (e.g., `ComposeTest.kt`).
+- Run tests with:
+  ```bash
+  ./gradlew test
+  ```
+  
+## Acknowledgments
+
+- [JetBrains](https://www.jetbrains.com/) for Kotlin and Compose Multiplatform.
+- [Arkivanov Decompose](https://github.com/arkivanov/Decompose) for navigation.
+- [Vinceglb FileKit](https://github.com/vinceglb/FileKit) for file handling.
+- [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization) for JSON support.
+
+## Contact
+
+For questions or feedback, please open an issue on the [GitHub repository](https://github.com/RecodeLiner/KDuoPass) or contact by email.
+
+---
+
+*Built with ❤️ using Kotlin Multiplatform*
