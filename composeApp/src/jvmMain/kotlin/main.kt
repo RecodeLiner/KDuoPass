@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
@@ -10,7 +11,6 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.extensions.compose.lifecycle.LifecycleController
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.rcl.kduopass.App
-import com.rcl.kduopass.InternalBuildConfig
 import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.AppComponent
@@ -19,6 +19,8 @@ import com.rcl.kduopass.presentation.navigation.RootComponent
 import io.github.vinceglb.filekit.FileKit
 import java.awt.Dimension
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 
 @OptIn(ExperimentalLayoutApi::class)
 fun main() {
@@ -39,7 +41,7 @@ fun main() {
         Window(
             onCloseRequest = ::exitApplication,
             state = windowState,
-            title = InternalBuildConfig.APP_NAME,
+            title = APP_NAME,
             content = {
                 window.minimumSize = Dimension(350, 600)
                 App(rootComponent)
@@ -58,8 +60,26 @@ fun main() {
     }
 }
 
+private fun getDatabasePath(): String {
+    val appDataDir = when (System.getProperty("os.name").lowercase()) {
+        in listOf("linux", "unix") -> {
+            Paths.get(System.getProperty("user.home"), ".config", APP_NAME).toString()
+        }
+        in listOf("mac os x", "darwin") -> {
+            Paths.get(System.getProperty("user.home"), "Library", "Application Support", APP_NAME).toString()
+        }
+        else -> {
+            Paths.get(System.getenv("APPDATA") ?: System.getProperty("user.home"), APP_NAME).toString()
+        }
+    }
+
+    Files.createDirectories(Paths.get(appDataDir))
+
+    return Paths.get(appDataDir, "app_database.db").toString()
+}
+
 fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
-    val dbFile = File(System.getProperty("java.io.tmpdir"), "user.db")
+    val dbFile = File(getDatabasePath())
     return Room.databaseBuilder<AppDatabase>(
         name = dbFile.absolutePath,
     )

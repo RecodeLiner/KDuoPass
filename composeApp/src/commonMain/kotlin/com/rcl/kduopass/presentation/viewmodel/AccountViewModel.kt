@@ -32,9 +32,7 @@ class AccountViewModel @Inject constructor(
                 generateTOTP,
                 deleteAccount
             )
-
     }
-
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
@@ -43,22 +41,21 @@ class AccountViewModel @Inject constructor(
 
     override fun onCreate() {
         scope.launch {
-            observeAccounts()
+            accountRepository.getAccounts().collect { accountList ->
+                _accounts.value = accountList.map {
+                    AccountWithCode(it, generateTOTP(it.secret))
+                }
+            }
         }
     }
 
-    private suspend fun observeAccounts() {
-        accountRepository.getAccounts().collect { accountList ->
-            updateAccountCodes(accountList)
+    fun refreshCodes() {
+        val currentAccounts = _accounts.value
+        if (currentAccounts.isNotEmpty()) {
+            _accounts.value = currentAccounts.map {
+                AccountWithCode(it.account, generateTOTP(it.account.secret))
+            }
         }
-    }
-
-    private fun updateAccountCodes(accounts: List<AccountEntity>) {
-        val updated = accounts.map {
-            val code = generateTOTP(it.secret)
-            AccountWithCode(it, code)
-        }
-        _accounts.value = updated
     }
 
     fun deleteAccount(account: AccountEntity) {

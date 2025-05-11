@@ -1,17 +1,21 @@
 package com.rcl.kduopass.presentation.screens.components
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -29,17 +33,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rcl.kduopass.presentation.viewmodel.components.AccountWithCode
+import kduopass.composeapp.generated.resources.Res
+import kduopass.composeapp.generated.resources.code_copied
+import kduopass.composeapp.generated.resources.copy_code
+import kduopass.composeapp.generated.resources.copy_secret
+import kduopass.composeapp.generated.resources.delete_account
+import kduopass.composeapp.generated.resources.secret_copied
+import kduopass.composeapp.generated.resources.secret_label
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AccountItem(
@@ -51,26 +62,27 @@ fun AccountItem(
     val clipboardManager = LocalClipboardManager.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val currentSecondsRemaining by rememberUpdatedState(newValue = secondsRemaining)
-    val progress = (30 - currentSecondsRemaining) / 30f
+
+    val progress = secondsRemaining.toFloat() / 30f
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
+        animationSpec = tween(durationMillis = 500),
         label = "animatedProgress"
     )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .padding(8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .width(200.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .animateContentSize()
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = accountWithCode.account.serviceName,
@@ -79,11 +91,14 @@ fun AccountItem(
                 )
 
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete account")
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(Res.string.delete_account)
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -95,23 +110,38 @@ fun AccountItem(
                     modifier = Modifier.size(100.dp)
                 )
 
-                Column {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
-                        text = if (showSecret) accountWithCode.account.secret else "•••••",
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = stringResource(Res.string.secret_label),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Box(
                         modifier = Modifier
                             .clickable { showSecret = !showSecret }
                             .padding(vertical = 4.dp)
-                    )
-
-                    CopyTextButton(label = "Copy Code") {
-                        clipboardManager.setText(AnnotatedString(accountWithCode.code))
-                        scope.launch { snackbarHostState.showSnackbar("Code copied") }
+                    ) {
+                        Crossfade(targetState = showSecret, label = "secretCrossfade") { visible ->
+                            Text(
+                                text = if (visible) accountWithCode.account.secret else "•••••",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
 
-                    CopyTextButton(label = "Copy Secret") {
+                    CopyTextButton(label = stringResource(Res.string.copy_code)) {
+                        clipboardManager.setText(AnnotatedString(accountWithCode.code))
+                        scope.launch {
+                            snackbarHostState.showSnackbar(getString(Res.string.code_copied))
+                        }
+                    }
+
+                    CopyTextButton(label = stringResource(Res.string.copy_secret)) {
                         clipboardManager.setText(AnnotatedString(accountWithCode.account.secret))
-                        scope.launch { snackbarHostState.showSnackbar("Secret copied") }
+                        scope.launch {
+                            snackbarHostState.showSnackbar(getString(Res.string.secret_copied))
+                        }
                     }
                 }
             }
@@ -123,7 +153,14 @@ fun AccountItem(
 
 @Composable
 private fun CopyTextButton(label: String, onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(text = label)
+    TextButton(
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+        modifier = Modifier.heightIn(min = 32.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
