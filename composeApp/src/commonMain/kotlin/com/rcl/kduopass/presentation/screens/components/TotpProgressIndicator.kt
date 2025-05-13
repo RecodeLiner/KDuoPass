@@ -2,10 +2,12 @@ package com.rcl.kduopass.presentation.screens.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -80,6 +82,19 @@ fun TOTPProgressIndicator(
             modifier = Modifier
                 .padding(16.dp)
                 .wrapContentSize()
+        )
+    }
+}
+
+@Preview
+@Composable
+fun TOTPProgressIndicatorPreview() {
+    Box(
+        modifier = Modifier.size(200.dp),
+    ) {
+        TOTPProgressIndicator(
+            progress = 0.75f,
+            code = "123456"
         )
     }
 }

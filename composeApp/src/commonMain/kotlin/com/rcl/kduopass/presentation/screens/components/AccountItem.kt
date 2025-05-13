@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rcl.kduopass.data.database.AccountEntity
 import com.rcl.kduopass.presentation.viewmodel.components.AccountWithCode
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.code_copied
@@ -161,6 +163,25 @@ private fun CopyTextButton(label: String, onClick: () -> Unit) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelLarge
+        )
+    }
+}
+
+@Preview
+@Composable
+fun AccountItemPreview() {
+    val dummyAccount = AccountEntity(
+        id = 0,
+        serviceName = "Example Service",
+        secret = "JBSWY3DPEHPK3PXP"
+    )
+    val dummyAccountWithCode = AccountWithCode(dummyAccount, "123456")
+
+    Box(modifier = Modifier.size(300.dp)){
+        AccountItem(
+            accountWithCode = dummyAccountWithCode,
+            secondsRemaining = 20,
+            onDelete = {}
         )
     }
 }
