@@ -5,8 +5,9 @@
     <string name="settings_theme_title">Тема приложения</string>
     <string name="accounts_title">Аккаунты</string>
     <string name="settings_export_accounts">Экспорт аккаунтов</string>
-    <string name="settings_import_accounts_clean">Импорт аккаунтов (очистка)</string>
-    <string name="settings_import_accounts_append">Импорт аккаунтов (добавление)</string>
+    <string name="settings_import_accounts">Импорт аккаунтов</string>
+    <string name="settings_import_accounts_clean">Импорт начисто</string>
+    <string name="settings_import_accounts_append">Импорт с добавлением</string>
     <string name="empty_accounts_placeholder">Аккаунтов пока нет</string>
     <string name="add_account_screen_title">Добавить аккаунт</string>
     <string name="add_account_screen_service_name">Название сервиса</string>
@@ -21,4 +22,7 @@
     <string name="settings_theme_system">Системная</string>
     <string name="settings_theme_dark">Тёмная</string>
     <string name="settings_theme_light">Светлая</string>
+    <string name="about_title">О приложении</string>
+    <string name="about_version">Версия: %1$s</string>
+    <string name="about_github">Посетите Github для ознакомления с исходниками.</string>
 </resources>

@@ -5,8 +5,9 @@
     <string name="settings_theme_title">Theme</string>
     <string name="accounts_title">Accounts</string>
     <string name="settings_export_accounts">Export Accounts</string>
-    <string name="settings_import_accounts_clean">Import Accounts(clean)</string>
-    <string name="settings_import_accounts_append">Import Accounts(append)</string>
+    <string name="settings_import_accounts">Import Accounts</string>
+    <string name="settings_import_accounts_clean">Import clean</string>
+    <string name="settings_import_accounts_append">Import via append</string>
     <string name="empty_accounts_placeholder">No accounts yet</string>
     <string name="add_account_screen_title">Add New Account</string>
     <string name="add_account_screen_service_name">Service Name</string>
@@ -21,4 +22,7 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_light">Light</string>
+    <string name="about_title">About App</string>
+    <string name="about_version">Version: %1$s</string>
+    <string name="about_github">Visit Github to learn more.</string>
 </resources>

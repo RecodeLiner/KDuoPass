@@ -11,6 +11,8 @@ plugins {
     id("com.rcl.buildconfig")
 }
 
+val appVersion = "1.0.0"
+
 kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
     androidTarget()
@@ -89,7 +91,7 @@ android {
 
         applicationId = "com.rcl.kduopass.androidApp"
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = appVersion
     }
 
     buildTypes {
@@ -120,7 +122,7 @@ compose.desktop {
                 TargetFormat.Deb
             )
             packageName = "KDuoPass"
-            packageVersion = "1.0.0"
+            packageVersion = appVersion
 
             linux {
                 iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
@@ -141,6 +143,7 @@ buildConfig {
     objectName = "InternalBuildConfig"
     packageName = "com.rcl.kduopass"
     buildConfigField("String", "APP_NAME", rootProject.name)
+    buildConfigField("String", "APP_VERSION", appVersion)
 }
 
 dependencies {

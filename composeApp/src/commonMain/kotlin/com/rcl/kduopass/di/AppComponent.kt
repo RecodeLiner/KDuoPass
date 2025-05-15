@@ -13,6 +13,7 @@ import com.rcl.kduopass.domain.usecase.AddAccountUseCase
 import com.rcl.kduopass.domain.usecase.FileAccountsUseCase
 import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
 import com.rcl.kduopass.domain.usecase.ThemeUseCase
+import com.rcl.kduopass.presentation.viewmodel.AboutViewModel
 import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
 import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
 import com.rcl.kduopass.presentation.viewmodel.SettingsViewModel
@@ -51,5 +52,6 @@ abstract class AppComponent(
     abstract val accountFactory: AccountViewModel.AccountViewModelFactory
     abstract val addAccountFactory: AddAccountViewModel.AddAccountViewModelFactory
     abstract val settingsFactory: SettingsViewModel.SettingsViewModelFactory
+    abstract val aboutFactory: AboutViewModel.AboutViewModelFactory
 }
 
