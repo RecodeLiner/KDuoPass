@@ -8,10 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 
-enum class ThemeMode {
-    DARK, LIGHT, NONE
-}
-
 class ThemeUseCase @Inject constructor(private val prefs: DataStore<Preferences>) {
 
     private val themeKey = stringPreferencesKey("theme_mode")
