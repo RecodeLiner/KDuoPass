@@ -63,7 +63,7 @@ fun AccountListScreen(
     LaunchedEffect(Unit) {
         while (true) {
             secondsRemaining = secondsUntilNextTick()
-            if (secondsRemaining == 30) { // Начало нового 30-секундного окна
+            if (secondsRemaining == 30) {
                 viewModel.refreshCodes()
             }
             delay(1000L)

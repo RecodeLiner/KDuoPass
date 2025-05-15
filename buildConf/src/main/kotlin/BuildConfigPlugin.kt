@@ -66,12 +66,12 @@ class BuildConfigPlugin : Plugin<Project> {
             dependsOn(generateTaskProvider)
         }
 
-        // Привязываем к build
+        // link to build
         project.tasks.named("build").configure {
             dependsOn(generateTaskProvider)
         }
 
-        // Привязываем к Gradle sync через prepareKotlinIdeaImport
+        // link to Gradle sync via prepareKotlinIdeaImport
         project.tasks.matching { it.name == "prepareKotlinIdeaImport" }.configureEach {
             dependsOn(generateTaskProvider)
         }

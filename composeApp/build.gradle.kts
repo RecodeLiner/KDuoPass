@@ -49,6 +49,7 @@ kotlin {
                 implementation(libs.room.runtime)
                 implementation(libs.sqlite.bundled)
                 implementation(libs.kotlin.inject.runtime)
+                implementation(libs.bundles.datastore)
             }
         }
 

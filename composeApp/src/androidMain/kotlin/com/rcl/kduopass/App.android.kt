@@ -10,6 +10,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.arkivanov.decompose.defaultComponentContext
 import com.rcl.kduopass.data.database.AppDatabase
+import com.rcl.kduopass.di.prefs.DataStoreBuilder
+import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
@@ -41,4 +43,8 @@ fun getDatabaseBuilder(ctx: Context): RoomDatabase.Builder<AppDatabase> {
         context = appContext,
         name = dbFile.absolutePath
     )
+}
+
+fun getPreferencesDataStoreBuilder(ctx: Context): DataStoreBuilder {
+    return DataStoreBuilder(ctx.filesDir.resolve(DATA_STORE_FILE_NAME).absolutePath)
 }

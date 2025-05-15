@@ -15,7 +15,9 @@ import com.rcl.kduopass.presentation.screens.RootScreen
 import com.rcl.kduopass.presentation.theme.AppTheme
 
 @Composable
-internal fun App(rootComponent: RootComponent) = AppTheme {
+internal fun App(rootComponent: RootComponent) = AppTheme(
+    themeUseCase = rootComponent.appComponent.themeUseCase
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()

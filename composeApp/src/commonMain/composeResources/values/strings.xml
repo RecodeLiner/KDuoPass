@@ -2,6 +2,7 @@
     <string name="app_name">KDuoPass</string>
     <string name="import_select">Select file to import</string>
     <string name="settings_title">Settings</string>
+    <string name="settings_theme_title">Theme</string>
     <string name="accounts_title">Accounts</string>
     <string name="settings_export_accounts">Export Accounts</string>
     <string name="settings_import_accounts_clean">Import Accounts(clean)</string>
@@ -17,4 +18,7 @@
     <string name="code_copied">Code copied</string>
     <string name="secret_copied">Secret copied</string>
     <string name="secret_label">Secret:</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_light">Light</string>
 </resources>

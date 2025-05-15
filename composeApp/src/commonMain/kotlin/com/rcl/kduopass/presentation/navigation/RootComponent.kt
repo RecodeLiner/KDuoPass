@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 
 class RootComponent(
     componentContext: ComponentContext,
-    private val appComponent: AppComponent,
+    val appComponent: AppComponent,
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<ScreenConfig>()

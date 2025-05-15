@@ -15,6 +15,8 @@ import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.AppComponent
 import com.rcl.kduopass.di.create
+import com.rcl.kduopass.di.prefs.DataStoreBuilder
+import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
 import io.github.vinceglb.filekit.FileKit
 import java.awt.Dimension
@@ -60,7 +62,7 @@ fun main() {
     }
 }
 
-private fun getDatabasePath(): String {
+private fun getDataDirPath(): String {
     val appDataDir = when (System.getProperty("os.name").lowercase()) {
         in listOf("linux", "unix") -> {
             Paths.get(System.getProperty("user.home"), ".config", APP_NAME).toString()
@@ -75,12 +77,17 @@ private fun getDatabasePath(): String {
 
     Files.createDirectories(Paths.get(appDataDir))
 
-    return Paths.get(appDataDir, "app_database.db").toString()
+    return appDataDir
 }
 
 fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
-    val dbFile = File(getDatabasePath())
+    val dbFile = File(getDataDirPath(), "app_database.db")
     return Room.databaseBuilder<AppDatabase>(
         name = dbFile.absolutePath,
     )
+}
+
+fun getPreferencesDataStoreBuilder(): DataStoreBuilder {
+    val prFile = File(getDataDirPath(), DATA_STORE_FILE_NAME)
+    return DataStoreBuilder(prFile.absolutePath)
 }

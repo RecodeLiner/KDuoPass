@@ -49,6 +49,12 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    override fun onResume() {
+        scope.launch {
+            refreshCodes()
+        }
+    }
+
     fun refreshCodes() {
         val currentAccounts = _accounts.value
         if (currentAccounts.isNotEmpty()) {
