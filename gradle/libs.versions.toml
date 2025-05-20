@@ -1,19 +1,19 @@
 [versions]
 
-kotlin = "2.1.20"
-compose = "1.8.0"
+kotlin = "2.1.21"
+compose = "1.8.1"
 agp = "8.10.0"
 androidx-activityCompose = "1.10.1"
 kotlinx-coroutines = "1.10.2"
 decompose = "3.3.0"
 kotlinx-serialization = "1.8.1"
-coil = "3.1.0"
-java = "17"
+coil = "3.2.0"
+java = "21"
 room = "2.7.1"
 ksp = "2.1.20-2.0.0"
 kotlin-inject="0.8.0"
 sqlite = "2.5.1"
-filekit = "0.10.0-beta03"
+filekit = "0.10.0-beta04"
 datastore = "1.2.0-alpha02"
 
 [libraries]
@@ -51,5 +51,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-room = { id = "androidx.room", version.ref = "room" }
+# room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
