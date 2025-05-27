@@ -10,6 +10,7 @@ pluginManagement {
               	includeGroupByRegex("android.*")
             }
         }
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev/")
         gradlePluginPortal()
         mavenCentral()
     }
@@ -27,6 +28,7 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         maven("https://packages.jetbrains.team/maven/p/kpm/public")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev/")
     }
 }
 include(":composeApp")

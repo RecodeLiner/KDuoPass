@@ -1,5 +1,6 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -109,6 +110,10 @@ android {
         }
 
     }
+}
+
+composeCompiler {
+    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
 
 compose.desktop {
