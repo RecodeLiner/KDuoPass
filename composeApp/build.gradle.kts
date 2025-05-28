@@ -12,7 +12,7 @@ plugins {
     id("com.rcl.buildconfig")
 }
 
-val appVersion = "1.0.0"
+val appVersion = "1.0.1"
 
 kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
@@ -91,7 +91,7 @@ android {
         targetSdk = 36
 
         applicationId = "com.rcl.kduopass.androidApp"
-        versionCode = 1
+        versionCode = 2
         versionName = appVersion
     }
 

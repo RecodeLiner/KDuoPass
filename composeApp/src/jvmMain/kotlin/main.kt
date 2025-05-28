@@ -50,7 +50,7 @@ fun main() {
             },
             onKeyEvent = {
                 when (it.key) {
-                    Key.Escape, Key.Backspace, Key.Back -> {
+                    Key.Escape, Key.Back -> {
                         rootComponent.navigateBack()
                         true
                     }

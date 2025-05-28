@@ -16,10 +16,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rcl.kduopass.data.database.AccountEntity
@@ -37,7 +35,7 @@ fun AddAccountScreen(
     viewModel: AddAccountViewModel,
     navigateBack: () -> Unit
 ) {
-    var state by remember { mutableStateOf(AddAccountState()) }
+    val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
@@ -59,7 +57,7 @@ fun AddAccountScreen(
         ) {
             TextField(
                 value = state.serviceName,
-                onValueChange = { state = state.copy(serviceName = it) },
+                onValueChange = { viewModel.updateState(serviceName = it) },
                 label = { Text(stringResource(Res.string.add_account_screen_service_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -67,7 +65,7 @@ fun AddAccountScreen(
 
             TextField(
                 value = state.secret,
-                onValueChange = { state = state.copy(secret = it) },
+                onValueChange = { viewModel.updateState(secret = it) },
                 label = { Text(stringResource(Res.string.add_account_screen_secret)) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -75,12 +73,14 @@ fun AddAccountScreen(
 
             Button(
                 onClick = {
-                    val account = AccountEntity(
-                        serviceName = state.serviceName,
-                        secret = state.secret
-                    )
-                    viewModel.addAccount(account) {
-                        navigateBack()
+                    if (viewModel.validateSecret()) {
+                        val account = AccountEntity(
+                            serviceName = state.serviceName,
+                            secret = state.secret
+                        )
+                        viewModel.addAccount(account) {
+                            navigateBack()
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -90,8 +90,3 @@ fun AddAccountScreen(
         }
     }
 }
-
-data class AddAccountState(
-    val serviceName: String = "",
-    val secret: String = ""
-)
