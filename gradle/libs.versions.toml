@@ -2,7 +2,7 @@
 
 kotlin = "2.2.0-RC"
 compose = "1.9.0+dev2505"
-agp = "8.10.0"
+agp = "8.10.1"
 androidx-activityCompose = "1.10.1"
 kotlinx-coroutines = "1.10.2"
 decompose = "3.3.0"
