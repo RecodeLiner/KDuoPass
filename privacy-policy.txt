@@ -1,0 +1,9 @@
+Privacy Policy
+
+KDuoPass does not collect, store or share any personal information.
+
+All data (such as authentication secrets) are stored locally on your device and are never transmitted to our servers or any third party. The app does not require an internet connection to function.
+
+The app may request access to your device's camera to scan QR codes, but no images or video are stored or transmitted.
+
+We take your privacy seriously. If you have any questions, please contact us.
