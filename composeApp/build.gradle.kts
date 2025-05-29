@@ -1,6 +1,7 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -11,8 +12,6 @@ plugins {
     alias(libs.plugins.ksp)
     id("com.rcl.buildconfig")
 }
-
-val appVersion = "1.0.1"
 
 kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
@@ -91,8 +90,8 @@ android {
         targetSdk = 36
 
         applicationId = "com.rcl.kduopass.androidApp"
-        versionCode = 2
-        versionName = appVersion
+        versionCode = project.properties["VERSION_CODE"].toString().toInt()
+        versionName = project.properties["VERSION_NAME"].toString()
     }
 
     buildTypes {
@@ -127,7 +126,7 @@ compose.desktop {
                 TargetFormat.Deb
             )
             packageName = "KDuoPass"
-            packageVersion = appVersion
+            packageVersion = project.properties["VERSION_NAME"].toString()
 
             linux {
                 iconFile.set(project.file("desktopAppIcons/LinuxIcon.png"))
@@ -148,7 +147,7 @@ buildConfig {
     objectName = "InternalBuildConfig"
     packageName = "com.rcl.kduopass"
     buildConfigField("String", "APP_NAME", rootProject.name)
-    buildConfigField("String", "APP_VERSION", appVersion)
+    buildConfigField("String", "APP_VERSION", project.properties["VERSION_NAME"].toString())
 }
 
 dependencies {
@@ -163,5 +162,31 @@ dependencies {
             add("kspIosArm64", this)
             add("kspIosSimulatorArm64", this)
         }
+    }
+}
+
+fun incrementVersion() {
+    val propertiesFile = file("gradle.properties")
+    val props = Properties()
+    props.load(propertiesFile.inputStream())
+
+    val versionCode = props["VERSION_CODE"].toString().toInt() + 1
+    props["VERSION_CODE"] = versionCode.toString()
+
+    val versionNameParts = props["VERSION_NAME"].toString().split(".").map { it.toInt() }.toMutableList()
+
+    if (versionNameParts.size == 3) {
+        versionNameParts[2] = versionNameParts[2] + 1
+        props["VERSION_NAME"] = versionNameParts.joinToString(".")
+    } else {
+        println("Incorrect VERSION_NAME format. Expected X.Y.Z")
+    }
+
+    props.store(propertiesFile.outputStream(), null)
+}
+
+tasks.register("incrementVersion") {
+    doLast {
+        incrementVersion()
     }
 }
