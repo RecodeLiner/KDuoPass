@@ -1,8 +1,7 @@
 package com.rcl.kduopass.presentation.viewmodel
 
 import com.rcl.kduopass.data.database.AccountEntity
-import com.rcl.kduopass.domain.usecase.AddAccountUseCase
-import com.rcl.kduopass.presentation.viewmodel.components.ViewModelFactory
+import com.rcl.kduopass.domain.usecase.AccountUseCases
 import com.rcl.kduopass.utils.TOTPUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,13 +14,8 @@ import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 
 class AddAccountViewModel @Inject constructor(
-    private val addAccountUseCase: AddAccountUseCase
+    private val accountUseCase: AccountUseCases
 ) : ViewModelComponent() {
-    class AddAccountViewModelFactory @Inject constructor(
-        private val addAccountUseCase: AddAccountUseCase
-    ) : ViewModelFactory<AddAccountViewModel> {
-        override fun create() = AddAccountViewModel(addAccountUseCase)
-    }
 
     data class AddAccountState(
         val serviceName: String = "",
@@ -34,7 +28,7 @@ class AddAccountViewModel @Inject constructor(
 
     fun addAccount(account: AccountEntity, onAccountAdded: () -> Unit) {
         scope.launch {
-            addAccountUseCase(account)
+            accountUseCase.addAccount(account)
             onAccountAdded()
         }
     }

@@ -9,14 +9,9 @@ import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.data.repository.AccountRepositoryImpl
 import com.rcl.kduopass.di.prefs.DataStoreBuilder
 import com.rcl.kduopass.domain.repository.AccountRepository
-import com.rcl.kduopass.domain.usecase.AddAccountUseCase
+import com.rcl.kduopass.domain.usecase.AccountUseCases
 import com.rcl.kduopass.domain.usecase.FileAccountsUseCase
-import com.rcl.kduopass.domain.usecase.GenerateCodeUseCase
 import com.rcl.kduopass.domain.usecase.ThemeUseCase
-import com.rcl.kduopass.presentation.viewmodel.AboutViewModel
-import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
-import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
-import com.rcl.kduopass.presentation.viewmodel.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import me.tatarka.inject.annotations.Component
@@ -45,13 +40,8 @@ abstract class AppComponent(
     @Provides
     fun provideDataStore(dataStoreBuilder: DataStoreBuilder) : DataStore<Preferences> =
         dataStoreBuilder.build()
-    abstract val generateCodeUseCase: GenerateCodeUseCase
-    abstract val addAccountUseCase: AddAccountUseCase
+    abstract val accountUseCases: AccountUseCases
     abstract val fileAccountsUseCase: FileAccountsUseCase
     abstract val themeUseCase: ThemeUseCase
-    abstract val accountFactory: AccountViewModel.AccountViewModelFactory
-    abstract val addAccountFactory: AddAccountViewModel.AddAccountViewModelFactory
-    abstract val settingsFactory: SettingsViewModel.SettingsViewModelFactory
-    abstract val aboutFactory: AboutViewModel.AboutViewModelFactory
 }
 

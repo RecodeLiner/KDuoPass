@@ -1,6 +1,8 @@
 package com.rcl.kduopass.domain.usecase
 
-data class AccountUseCases(
+import me.tatarka.inject.annotations.Inject
+
+data class AccountUseCases @Inject constructor(
     val getAccounts: GetAccountsUseCase,
     val addAccount: AddAccountUseCase,
     val deleteAccount: DeleteAccountUseCase,

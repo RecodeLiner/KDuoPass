@@ -18,6 +18,7 @@ import com.rcl.kduopass.di.create
 import com.rcl.kduopass.di.prefs.DataStoreBuilder
 import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
+import com.rcl.kduopass.di.DIComponentContextImpl
 import io.github.vinceglb.filekit.FileKit
 import java.awt.Dimension
 import java.io.File
@@ -32,8 +33,10 @@ fun main() {
 
     val rootComponent = runOnUiThread {
         RootComponent(
-            componentContext = DefaultComponentContext(lifecycle = lifecycle),
-            appComponent = appComponent,
+            componentContext = DIComponentContextImpl(
+                DefaultComponentContext(lifecycle = lifecycle),
+                appComponent
+            )
         )
     }
 

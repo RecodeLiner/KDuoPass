@@ -1,11 +1,10 @@
 package com.rcl.kduopass.presentation.navigation
 
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushToFront
-import com.rcl.kduopass.di.AppComponent
+import com.rcl.kduopass.di.IDIComponentContext
 import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.AboutChild
 import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.AccountsChild
 import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.AddAccountChild
@@ -13,9 +12,8 @@ import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.Set
 import kotlinx.serialization.Serializable
 
 class RootComponent(
-    componentContext: ComponentContext,
-    val appComponent: AppComponent,
-) : ComponentContext by componentContext {
+    componentContext: IDIComponentContext
+) : IDIComponentContext by componentContext {
 
     private val navigation = StackNavigation<ScreenConfig>()
 
@@ -35,12 +33,22 @@ class RootComponent(
         serializer = ScreenConfig.serializer()
     )
 
-    private fun createChild(config: ScreenConfig, context: ComponentContext): ComponentChild {
+    private fun createChild(config: ScreenConfig, context: IDIComponentContext): ComponentChild {
         return when (config) {
-            ScreenConfig.Accounts -> AccountsChild(AccountComponent(context, appComponent.accountFactory))
-            ScreenConfig.AddAccount -> AddAccountChild(AddAccountComponent(context, appComponent.addAccountFactory))
-            ScreenConfig.Settings -> SettingsChild(SettingsComponent(context, appComponent.settingsFactory))
-            ScreenConfig.About -> AboutChild(AboutComponent(context, appComponent.aboutFactory))
+            ScreenConfig.Accounts -> AccountsChild(AccountComponent(context))
+            ScreenConfig.AddAccount -> AddAccountChild(
+                AddAccountComponent(
+                    context
+                )
+            )
+
+            ScreenConfig.Settings -> SettingsChild(
+                SettingsComponent(
+                    context
+                )
+            )
+
+            ScreenConfig.About -> AboutChild(AboutComponent(context))
         }
     }
 
@@ -50,6 +58,7 @@ class RootComponent(
         data class SettingsChild(val components: SettingsComponent) : ComponentChild()
         data class AboutChild(val component: AboutComponent) : ComponentChild()
     }
+
     @Serializable
     sealed interface ScreenConfig {
         @Serializable
@@ -57,8 +66,10 @@ class RootComponent(
 
         @Serializable
         data object AddAccount : ScreenConfig
+
         @Serializable
         data object Settings : ScreenConfig
+
         @Serializable
         data object About : ScreenConfig
     }

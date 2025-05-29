@@ -3,7 +3,6 @@ package com.rcl.kduopass.presentation.viewmodel
 import com.rcl.kduopass.domain.usecase.FileAccountsUseCase
 import com.rcl.kduopass.domain.usecase.ThemeMode
 import com.rcl.kduopass.domain.usecase.ThemeUseCase
-import com.rcl.kduopass.presentation.viewmodel.components.ViewModelFactory
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.openFilePicker
@@ -26,15 +25,6 @@ class SettingsViewModel @Inject constructor(
     private val themeUseCase: ThemeUseCase,
     private val fileAccountsUseCase: FileAccountsUseCase
 ) : ViewModelComponent() {
-
-    class SettingsViewModelFactory @Inject constructor(
-        private val themeUseCase: ThemeUseCase,
-        private val fileAccountsUseCase: FileAccountsUseCase
-    ) : ViewModelFactory<SettingsViewModel> {
-        override fun create() = SettingsViewModel(
-            themeUseCase, fileAccountsUseCase
-        )
-    }
 
     private val _isInAction = MutableStateFlow(false)
     val isInAction: StateFlow<Boolean> = _isInAction

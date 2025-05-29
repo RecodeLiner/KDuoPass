@@ -13,6 +13,7 @@ import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.prefs.DataStoreBuilder
 import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
+import com.rcl.kduopass.di.DIComponentContextImpl
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
 
@@ -23,8 +24,10 @@ class AppActivity : ComponentActivity() {
         FileKit.init(this)
         val root =
             RootComponent(
-                componentContext = defaultComponentContext(),
-                appComponent = (application as App).appComponent(),
+                componentContext = DIComponentContextImpl(
+                    defaultComponentContext(),
+                    (application as App).appComponent()
+                )
             )
         enableEdgeToEdge()
         setContent {
