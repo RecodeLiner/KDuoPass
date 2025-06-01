@@ -35,7 +35,12 @@ class RootComponent(
 
     private fun createChild(config: ScreenConfig, context: IDIComponentContext): ComponentChild {
         return when (config) {
-            ScreenConfig.Accounts -> AccountsChild(AccountComponent(context))
+            ScreenConfig.Accounts -> AccountsChild(
+                AccountComponent(
+                    context
+                )
+            )
+
             ScreenConfig.AddAccount -> AddAccountChild(
                 AddAccountComponent(
                     context

@@ -22,17 +22,25 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.rcl.kduopass.domain.usecase.ThemeMode
 import com.rcl.kduopass.presentation.navigation.RootComponent
-import com.rcl.kduopass.presentation.viewmodel.SettingsViewModel
+import com.rcl.kduopass.presentation.viewmodel.SettingsStoreFactory
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.about_title
+import kduopass.composeapp.generated.resources.accounts_exported_success
+import kduopass.composeapp.generated.resources.accounts_imported_success
 import kduopass.composeapp.generated.resources.settings_export_accounts
 import kduopass.composeapp.generated.resources.settings_import_accounts
 import kduopass.composeapp.generated.resources.settings_import_accounts_append
@@ -42,16 +50,42 @@ import kduopass.composeapp.generated.resources.settings_theme_light
 import kduopass.composeapp.generated.resources.settings_theme_system
 import kduopass.composeapp.generated.resources.settings_theme_title
 import kduopass.composeapp.generated.resources.settings_title
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
+    store: SettingsStoreFactory.SettingsStore,
     navigateBack: () -> Unit,
     navigateTo: (RootComponent.ScreenConfig) -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val state by store.stateFlow.collectAsState()
+    val label by store.labels.collectAsState(null)
+
+    LaunchedEffect(label) {
+        when (label) {
+            SettingsStoreFactory.SettingsStore.Label.AccountsExported -> {
+                snackbarHostState.showSnackbar(
+                    message = getString(Res.string.accounts_exported_success)
+                )
+            }
+            SettingsStoreFactory.SettingsStore.Label.AccountsImported -> {
+                snackbarHostState.showSnackbar(
+                    message = getString(Res.string.accounts_imported_success)
+                )
+            }
+
+            null -> {
+
+            }
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -73,7 +107,11 @@ fun SettingsScreen(
     ) { paddingValues ->
         SettingsContent(
             paddingValues = paddingValues,
-            viewModel = viewModel,
+            state = state,
+            onUpdateTheme = { themeMode -> store.accept(SettingsStoreFactory.SettingsStore.Intent.UpdateTheme(themeMode)) },
+            onExportAccounts = { store.accept(SettingsStoreFactory.SettingsStore.Intent.ExportAccountsToFile()) },
+            onImportAccountsClean = { store.accept(SettingsStoreFactory.SettingsStore.Intent.ImportAccountsFromFile(isClean = true)) },
+            onImportAccountsAppend = { store.accept(SettingsStoreFactory.SettingsStore.Intent.ImportAccountsFromFile(isClean = false)) },
             navigateToAbout = { navigateTo(RootComponent.ScreenConfig.About) }
         )
     }
@@ -82,12 +120,13 @@ fun SettingsScreen(
 @Composable
 private fun SettingsContent(
     paddingValues: PaddingValues,
-    viewModel: SettingsViewModel,
+    state: SettingsStoreFactory.SettingsStore.State,
+    onUpdateTheme: (ThemeMode) -> Unit,
+    onExportAccounts: () -> Unit,
+    onImportAccountsClean: () -> Unit,
+    onImportAccountsAppend: () -> Unit,
     navigateToAbout: () -> Unit
 ) {
-    val isExportInAction by viewModel.isInAction.collectAsState()
-    val currentTheme by viewModel.currentTheme.collectAsState()
-
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues)
@@ -108,18 +147,18 @@ private fun SettingsContent(
             ) {
                 ThemeButton(
                     text = stringResource(Res.string.settings_theme_light),
-                    onClick = { viewModel.updateTheme(ThemeMode.LIGHT) },
-                    isSelected = currentTheme == ThemeMode.LIGHT
+                    onClick = { onUpdateTheme(ThemeMode.LIGHT) },
+                    isSelected = state.currentTheme == ThemeMode.LIGHT
                 )
                 ThemeButton(
                     text = stringResource(Res.string.settings_theme_dark),
-                    onClick = { viewModel.updateTheme(ThemeMode.DARK) },
-                    isSelected = currentTheme == ThemeMode.DARK
+                    onClick = { onUpdateTheme(ThemeMode.DARK) },
+                    isSelected = state.currentTheme == ThemeMode.DARK
                 )
                 ThemeButton(
                     text = stringResource(Res.string.settings_theme_system),
-                    onClick = { viewModel.updateTheme(ThemeMode.NONE) },
-                    isSelected = currentTheme == ThemeMode.NONE
+                    onClick = { onUpdateTheme(ThemeMode.NONE) },
+                    isSelected = state.currentTheme == ThemeMode.NONE
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -135,8 +174,8 @@ private fun SettingsContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                enabled = !isExportInAction,
-                onClick = viewModel::exportAccountsToFile
+                enabled = !state.isInAction,
+                onClick = onExportAccounts
             ) {
                 Text(stringResource(Res.string.settings_export_accounts))
             }
@@ -156,14 +195,14 @@ private fun SettingsContent(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    enabled = !isExportInAction,
-                    onClick = { viewModel.importAccountsFromFile(isClean = true) }
+                    enabled = !state.isInAction,
+                    onClick = onImportAccountsClean
                 ) {
                     Text(stringResource(Res.string.settings_import_accounts_clean))
                 }
                 Button(
-                    enabled = !isExportInAction,
-                    onClick = { viewModel.importAccountsFromFile(isClean = false) }
+                    enabled = !state.isInAction,
+                    onClick = onImportAccountsAppend
                 ) {
                     Text(stringResource(Res.string.settings_import_accounts_append))
                 }

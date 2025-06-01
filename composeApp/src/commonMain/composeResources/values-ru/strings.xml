@@ -25,4 +25,6 @@
     <string name="about_title">О приложении</string>
     <string name="about_version">Версия: %1$s</string>
     <string name="about_github">Посетите Github для ознакомления с исходниками.</string>
+    <string name="accounts_exported_success">Экспорт прошёл успешно.</string>
+    <string name="accounts_imported_success">Импорт прошёл успешно.</string>
 </resources>

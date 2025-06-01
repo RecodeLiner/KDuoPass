@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.InternalBuildConfig.APP_VERSION
-import com.rcl.kduopass.presentation.viewmodel.AboutViewModel
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.about_github
 import kduopass.composeapp.generated.resources.about_title
@@ -34,7 +33,6 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    viewModel: AboutViewModel,
     navigateBack: () -> Unit
 ) {
     Scaffold(

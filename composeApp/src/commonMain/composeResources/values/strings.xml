@@ -25,4 +25,6 @@
     <string name="about_title">About App</string>
     <string name="about_version">Version: %1$s</string>
     <string name="about_github">Visit Github to learn more.</string>
+    <string name="accounts_exported_success">Export success.</string>
+    <string name="accounts_imported_success">Import success.</string>
 </resources>

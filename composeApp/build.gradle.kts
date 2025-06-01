@@ -51,6 +51,7 @@ kotlin {
                 implementation(libs.sqlite.bundled)
                 implementation(libs.kotlin.inject.runtime)
                 implementation(libs.bundles.datastore)
+                implementation(libs.bundles.mvikotlin)
             }
         }
 

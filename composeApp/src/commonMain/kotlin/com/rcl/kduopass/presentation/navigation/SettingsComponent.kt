@@ -1,19 +1,20 @@
 package com.rcl.kduopass.presentation.navigation
 
-import com.arkivanov.essenty.instancekeeper.getOrCreate
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.rcl.kduopass.di.IDIComponentContext
-import com.rcl.kduopass.presentation.viewmodel.SettingsViewModel
+import com.rcl.kduopass.presentation.viewmodel.SettingsStoreFactory
 
 class SettingsComponent(
     componentContext: IDIComponentContext
-) : DIComponentWithLCBind<SettingsViewModel>(componentContext) {
-
-    override fun createViewModel(): SettingsViewModel {
-        return instanceKeeper.getOrCreate {
-            SettingsViewModel(
-                appComponent.themeUseCase,
-                appComponent.fileAccountsUseCase
-            )
+) : IDIComponentContext by componentContext {
+    internal val settingsStore by lazy {
+        instanceKeeper.getStore {
+            SettingsStoreFactory(
+                storeFactory = DefaultStoreFactory(),
+                themeUseCase = appComponent.themeUseCase,
+                fileAccountsUseCase = appComponent.fileAccountsUseCase,
+            ).create()
         }
     }
 }

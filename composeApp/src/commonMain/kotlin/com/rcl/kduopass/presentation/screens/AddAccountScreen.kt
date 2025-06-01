@@ -16,26 +16,58 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rcl.kduopass.data.database.AccountEntity
-import com.rcl.kduopass.presentation.viewmodel.AddAccountViewModel
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.rcl.kduopass.presentation.viewmodel.AddAccountStoreFactory
+import com.rcl.kduopass.presentation.viewmodel.AddAccountStoreFactory.AddAccountStore.Intent.AddAccount
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.add_account_screen_save
 import kduopass.composeapp.generated.resources.add_account_screen_secret
 import kduopass.composeapp.generated.resources.add_account_screen_service_name
 import kduopass.composeapp.generated.resources.add_account_screen_title
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun AddAccountScreen(
-    viewModel: AddAccountViewModel,
+    store: AddAccountStoreFactory.AddAccountStore,
     navigateBack: () -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by store.stateFlow.collectAsState()
+    val labels by store.labels.collectAsState(null)
+    var isInvalid by remember { mutableStateOf(false) }
+
+    LaunchedEffect(labels) {
+        when (val label = labels) {
+            is AddAccountStoreFactory.AddAccountStore.Label.ValidationResult -> {
+                if (label.isValid) {
+                    store.accept(AddAccount(state))
+                }
+                else {
+                    isInvalid = true
+                    delay(2_000)
+                    isInvalid = false
+                }
+            }
+            AddAccountStoreFactory.AddAccountStore.Label.AccountAdded -> {
+                navigateBack()
+            }
+
+            null -> {
+
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -57,15 +89,28 @@ fun AddAccountScreen(
         ) {
             TextField(
                 value = state.serviceName,
-                onValueChange = { viewModel.updateState(serviceName = it) },
+                onValueChange = {
+                    store.accept(
+                        AddAccountStoreFactory.AddAccountStore.Intent.UpdateServiceName(
+                            it
+                        )
+                    )
+                },
                 label = { Text(stringResource(Res.string.add_account_screen_service_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.padding(16.dp))
 
             TextField(
+                isError = isInvalid,
                 value = state.secret,
-                onValueChange = { viewModel.updateState(secret = it) },
+                onValueChange = {
+                    store.accept(
+                        AddAccountStoreFactory.AddAccountStore.Intent.UpdateSecret(
+                            it
+                        )
+                    )
+                },
                 label = { Text(stringResource(Res.string.add_account_screen_secret)) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -73,15 +118,7 @@ fun AddAccountScreen(
 
             Button(
                 onClick = {
-                    if (viewModel.validateSecret()) {
-                        val account = AccountEntity(
-                            serviceName = state.serviceName,
-                            secret = state.secret
-                        )
-                        viewModel.addAccount(account) {
-                            navigateBack()
-                        }
-                    }
+                    store.accept(AddAccountStoreFactory.AddAccountStore.Intent.ValidateSecret(state.secret))
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

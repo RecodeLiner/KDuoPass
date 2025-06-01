@@ -33,23 +33,22 @@ fun RootScreen(rootComponent: RootComponent) {
     ) {
         when (val child = it.instance) {
             is RootComponent.ComponentChild.AccountsChild -> AccountListScreen(
-                child.components.vm,
+                child.components.accountStore,
                 rootComponent::navigateTo
             )
 
             is RootComponent.ComponentChild.AddAccountChild -> AddAccountScreen(
-                child.components.vm,
+                child.components.addAccountStore,
                 rootComponent::navigateBack
             )
 
             is RootComponent.ComponentChild.SettingsChild -> SettingsScreen(
-                child.components.vm,
+                child.components.settingsStore,
                 rootComponent::navigateBack,
                 rootComponent::navigateTo
             )
 
             is RootComponent.ComponentChild.AboutChild -> AboutScreen(
-                child.component.vm,
                 rootComponent::navigateBack
             )
         }

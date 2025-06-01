@@ -15,6 +15,7 @@ kotlin-inject="0.8.0"
 sqlite = "2.5.1"
 filekit = "0.10.0-beta04"
 datastore = "1.2.0-alpha02"
+mvikotlin = "4.3.0"
 
 [libraries]
 
@@ -39,10 +40,17 @@ kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-run
 datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
+mvikotlin-core = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlin" }
+mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlin" }
+mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
+mvikotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mvikotlin" }
+mvikotlin-timetravel = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-timetravel", version.ref = "mvikotlin" }
+
 [bundles]
 
 fileKit = ["filekit-core", "filekit-dialogs"]
 datastore = ["datastore-core", "datastore-preferences"]
+mvikotlin = ["mvikotlin-core", "mvikotlin-main", "mvikotlin-coroutines", "mvikotlin-logging", "mvikotlin-timetravel"]
 
 [plugins]
 

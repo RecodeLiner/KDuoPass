@@ -10,10 +10,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.arkivanov.decompose.defaultComponentContext
 import com.rcl.kduopass.data.database.AppDatabase
+import com.rcl.kduopass.di.DIComponentContextImpl
 import com.rcl.kduopass.di.prefs.DataStoreBuilder
 import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
-import com.rcl.kduopass.di.DIComponentContextImpl
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
 

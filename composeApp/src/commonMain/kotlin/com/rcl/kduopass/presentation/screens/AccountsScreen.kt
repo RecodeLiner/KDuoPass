@@ -38,33 +38,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.rcl.kduopass.presentation.navigation.RootComponent
 import com.rcl.kduopass.presentation.screens.components.AccountItem
-import com.rcl.kduopass.presentation.viewmodel.AccountViewModel
+import com.rcl.kduopass.presentation.viewmodel.AccountStoreFactory
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.accounts_title
 import kduopass.composeapp.generated.resources.add_account_screen_title
 import kduopass.composeapp.generated.resources.empty_accounts_placeholder
 import kduopass.composeapp.generated.resources.settings_title
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun AccountListScreen(
-    viewModel: AccountViewModel,
+    store: AccountStoreFactory.AccountStore,
     navigateTo: (RootComponent.ScreenConfig) -> Unit
 ) {
-    val accounts by viewModel.accounts.collectAsState()
+    val state by store.stateFlow.collectAsState()
     var secondsRemaining by remember { mutableStateOf(secondsUntilNextTick()) }
 
     LaunchedEffect(Unit) {
+        store.accept(AccountStoreFactory.AccountStore.Intent.RefreshData)
         while (true) {
             secondsRemaining = secondsUntilNextTick()
             if (secondsRemaining == 30) {
-                viewModel.refreshCodes()
+                store.accept(AccountStoreFactory.AccountStore.Intent.RefreshData)
             }
             delay(1000L)
         }
@@ -75,7 +78,10 @@ fun AccountListScreen(
             FloatingActionButton(onClick = {
                 navigateTo(RootComponent.ScreenConfig.AddAccount)
             }) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_account_screen_title))
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(Res.string.add_account_screen_title)
+                )
             }
         },
         topBar = {
@@ -87,7 +93,10 @@ fun AccountListScreen(
                     IconButton(onClick = {
                         navigateTo(RootComponent.ScreenConfig.Settings)
                     }) {
-                        Icon(Icons.Filled.Settings, contentDescription = stringResource(Res.string.settings_title))
+                        Icon(
+                            Icons.Filled.Settings,
+                            contentDescription = stringResource(Res.string.settings_title)
+                        )
                     }
                 }
             )
@@ -98,7 +107,7 @@ fun AccountListScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (accounts.isEmpty()) {
+            if (state.accountsWithCode.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -121,7 +130,7 @@ fun AccountListScreen(
                 }
             } else {
                 AnimatedVisibility(
-                    visible = accounts.isNotEmpty(),
+                    visible = state.accountsWithCode.isNotEmpty(),
                     enter = fadeIn() + expandIn(),
                     exit = fadeOut() + shrinkOut()
                 ) {
@@ -134,13 +143,19 @@ fun AccountListScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(
-                            items = accounts,
+                            items = state.accountsWithCode,
                             key = { it.account.id }
                         ) { accountWithCode ->
                             AccountItem(
                                 accountWithCode = accountWithCode,
                                 secondsRemaining = secondsRemaining,
-                                onDelete = { viewModel.deleteAccount(accountWithCode.account) }
+                                onDelete = {
+                                    store.accept(
+                                        AccountStoreFactory.AccountStore.Intent.DeleteAccount(
+                                            accountWithCode.account
+                                        )
+                                    )
+                                }
                             )
                         }
                     }

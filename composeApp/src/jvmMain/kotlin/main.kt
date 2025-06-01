@@ -1,5 +1,3 @@
-
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.window.Window
@@ -14,18 +12,17 @@ import com.rcl.kduopass.App
 import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.data.database.AppDatabase
 import com.rcl.kduopass.di.AppComponent
+import com.rcl.kduopass.di.DIComponentContextImpl
 import com.rcl.kduopass.di.create
 import com.rcl.kduopass.di.prefs.DataStoreBuilder
 import com.rcl.kduopass.di.prefs.DataStoreBuilder.Companion.DATA_STORE_FILE_NAME
 import com.rcl.kduopass.presentation.navigation.RootComponent
-import com.rcl.kduopass.di.DIComponentContextImpl
 import io.github.vinceglb.filekit.FileKit
 import java.awt.Dimension
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
-@OptIn(ExperimentalLayoutApi::class)
 fun main() {
     FileKit.init(appId = APP_NAME)
     val lifecycle = LifecycleRegistry()
