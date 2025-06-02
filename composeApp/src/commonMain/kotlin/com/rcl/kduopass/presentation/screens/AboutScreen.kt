@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rcl.kduopass.InternalBuildConfig.APP_NAME
 import com.rcl.kduopass.InternalBuildConfig.APP_VERSION
+import com.rcl.kduopass.presentation.screens.components.AppIcon
 import kduopass.composeapp.generated.resources.Res
 import kduopass.composeapp.generated.resources.about_github
 import kduopass.composeapp.generated.resources.about_title
@@ -63,6 +65,15 @@ fun AboutScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Icon(
+                imageVector = AppIcon,
+                modifier = Modifier
+                    .size(128.dp),
+                contentDescription = "App icon on AboutScreen",
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = APP_NAME,
                 style = MaterialTheme.typography.headlineMedium,
