@@ -9,7 +9,6 @@ import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.f
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.rcl.kduopass.presentation.navigation.RootComponent
 
@@ -25,8 +24,7 @@ fun RootScreen(rootComponent: RootComponent) {
             predictiveBackParams = {
                 PredictiveBackParams(
                     backHandler = rootComponent.backHandler,
-                    onBack = rootComponent::navigateBack,
-                    animatable = ::androidPredictiveBackAnimatable,
+                    onBack = rootComponent::navigateBack
                 )
             }
         ),

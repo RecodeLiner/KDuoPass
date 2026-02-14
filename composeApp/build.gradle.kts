@@ -1,4 +1,4 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
+import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import java.util.Properties
 
@@ -32,19 +32,19 @@ kotlin {
     sourceSets {
         commonMain.configure {
             dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
-                implementation(compose.components.uiToolingPreview)
-                implementation(compose.components.resources)
+                implementation(libs.runtime)
+                implementation(libs.foundation)
+                implementation(libs.material3)
+                implementation(libs.material.icons.extended)
+                implementation(libs.ui.tooling.preview)
+                implementation(libs.components.resources)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.decompose)
                 implementation(libs.decompose.compose)
                 implementation(libs.decompose.experiments)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.coil)
-                implementation(compose.components.resources)
+                implementation(libs.components.resources)
                 implementation(libs.bundles.fileKit)
                 implementation(libs.coil.network.ktor)
                 implementation(libs.room.runtime)
@@ -58,15 +58,14 @@ kotlin {
         commonTest.configure {
             dependencies {
                 implementation(kotlin("test"))
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.uiTest)
+                implementation(libs.ui.test)
                 implementation(libs.kotlinx.coroutines.test)
             }
         }
 
         androidMain.configure {
             dependencies {
-                implementation(compose.uiTooling)
+                implementation(libs.ui.tooling)
                 implementation(libs.androidx.activityCompose)
                 implementation(libs.kotlinx.coroutines.android)
             }
@@ -81,12 +80,12 @@ kotlin {
     }
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = "com.rcl.kduopass"
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
 
         applicationId = "com.rcl.kduopass.androidApp"
@@ -106,8 +105,10 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("debug")
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
-
     }
 }
 

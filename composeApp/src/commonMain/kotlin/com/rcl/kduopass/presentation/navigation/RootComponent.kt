@@ -1,5 +1,6 @@
 package com.rcl.kduopass.presentation.navigation
 
+import androidx.compose.runtime.Stable
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
@@ -11,6 +12,7 @@ import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.Add
 import com.rcl.kduopass.presentation.navigation.RootComponent.ComponentChild.SettingsChild
 import kotlinx.serialization.Serializable
 
+@Stable
 class RootComponent(
     componentContext: IDIComponentContext
 ) : IDIComponentContext by componentContext {

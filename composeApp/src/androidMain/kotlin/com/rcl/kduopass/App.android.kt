@@ -13,6 +13,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.core.view.WindowCompat
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.arkivanov.decompose.defaultComponentContext
@@ -37,6 +38,7 @@ class AppActivity : ComponentActivity() {
                 )
             )
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             @RequiresApi(Build.VERSION_CODES.S)
             @Composable
