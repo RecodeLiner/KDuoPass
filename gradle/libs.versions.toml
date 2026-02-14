@@ -1,25 +1,33 @@
 [versions]
 
-kotlin = "2.2.0-RC"
-compose = "1.9.0+dev2505"
-agp = "8.10.1"
-androidx-activityCompose = "1.10.1"
+componentsResources = "1.10.1"
+foundation = "1.10.1"
+kotlin = "2.3.10"
+compose = "1.10.1"
+agp = "9.0.1"
+androidx-activityCompose = "1.12.4"
 kotlinx-coroutines = "1.10.2"
-decompose = "3.3.0"
-kotlinx-serialization = "1.8.1"
-coil = "3.2.0"
+decompose = "3.4.0"
+kotlinx-serialization = "1.10.0"
+coil = "3.3.0"
 java = "21"
-room = "2.7.1"
-ksp = "2.2.0-RC-2.0.1"
-kotlin-inject="0.8.0"
-sqlite = "2.5.1"
-filekit = "0.10.0-beta04"
-datastore = "1.2.0-alpha02"
+material3 = "1.9.0"
+materialIconsExtended = "1.7.3"
+room = "2.8.4"
+ksp = "2.3.2"
+kotlin-inject= "0.9.0"
+runtime = "1.10.1"
+sqlite = "2.6.2"
+filekit = "0.12.0"
+datastore = "1.2.0"
 mvikotlin = "4.3.0"
+uiTest = "1.10.1"
 
 [libraries]
 
 androidx-activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activityCompose" }
+components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
+foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "foundation" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
@@ -32,8 +40,11 @@ filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.re
 filekit-dialogs = { group = "io.github.vinceglb", name = "filekit-dialogs", version.ref = "filekit" }
 coil = { group = "io.coil-kt.coil3", name = "coil-compose-core", version.ref = "coil" }
 coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
+material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "runtime" }
 sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
 kotlin-inject-compiler = { group = "me.tatarka.inject", name = "kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
 kotlin-inject-runtime = { group = "me.tatarka.inject", name = "kotlin-inject-runtime", version.ref = "kotlin-inject" }
@@ -45,6 +56,9 @@ mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", v
 mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
 mvikotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mvikotlin" }
 mvikotlin-timetravel = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-timetravel", version.ref = "mvikotlin" }
+ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "uiTest" }
+ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTest" }
+ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiTest" }
 
 [bundles]
 
